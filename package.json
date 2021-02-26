@@ -1,0 +1,10 @@
+{
+  "name": "red-regatta",
+  "version": "0.0.1",
+  "description": "Repackage AS3 [RED]Regatta as TypeScript library",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "typescript": "^4.3.0-dev.20210222"
+  }
+}
