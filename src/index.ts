@@ -11,6 +11,7 @@ export { RaceStatus } from'./Model/Course/RaceStatus';
 export { AIS } from'./Model/Data/AIS';
 export { AISTarget } from'./Model/Data/AISTarget';
 export { GPSPoint } from'./Model/Data/GPSPoint';
+export { GPX } from './Model/Data/GPX';
 export { NMEA } from'./Model/Data/NMEA';
 export { NMEAEvent } from'./Model/Data/NMEAEvent';
 export { SailPoint } from'./Model/Data/SailPoint';

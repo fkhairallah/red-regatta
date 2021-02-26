@@ -1,5 +1,3 @@
-// module Model.Data
-// {
 // 	import {File = flash.filesystem.File;
 // 	import {FileMode = flash.filesystem.FileMode;
 // 	import {FileStream = flash.filesystem.FileStream;
@@ -11,13 +9,13 @@
 	
 // 	import {CourseMark = Model.Course.CourseMark;
 	
-// 	export class GPX
-// 	{
+export class GPX
+{
 		
 		
-// 		constructor()
-// 		{
-// 		}
+		constructor()
+		{
+		}
 		
 // 		/******************************************************************************************************
 // 		 * 
@@ -468,5 +466,4 @@
 // 			return df.format(d)+"Z";
 // 		}
 		
-// 	}
-// }
+}
