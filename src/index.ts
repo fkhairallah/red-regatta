@@ -1,3 +1,8 @@
+// NOAA
+export {NoaaStation} from './Model/NoaaStation';
+export {NoaaStationList} from './Model/NoaaStationList';
+export {Owner} from './Model/Owner';
+
 // Course
 export { CourseLayout } from'./Model/Course/CourseLayout';
 export { CourseLeg } from'./Model/Course/CourseLeg';
