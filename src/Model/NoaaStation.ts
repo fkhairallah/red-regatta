@@ -9,7 +9,7 @@ export class NoaaStation {
 	public location: GPSPoint;
 
 
-	constructor(pName: string, pState: string, pId: number, pLat: number, pLon: number) {
+	constructor(pName: string="", pState: string="", pId: number=0, pLat: number=0, pLon: number=0) {
 		this.name = pName;
 		this.state = pState;
 		this.id = pId;

@@ -13,7 +13,7 @@ export class NoaaStationList
     {
         var nearbyStations:NoaaStation[] = []; // stations that are within range
         var closestDistance:number = Number.MAX_VALUE;			// largest possible as a starting point
-        var closestStation:NoaaStation;
+        var closestStation:NoaaStation = new NoaaStation();		// closest station to my location
         
         for (let ns of this.stations)
         {
@@ -38,7 +38,7 @@ export class NoaaStationList
     
     constructor()
     {
-  
+        this.stations = [];
         this.stations.push(new NoaaStation("Ogdensburg", "NY", 8311030,44.7029,-75.4944));
         this.stations.push(new NoaaStation("Alexandria Bay", "NY", 8311062,44.3311,-75.9345));
         this.stations.push(new NoaaStation("Eastport", "ME", 8410140,44.9046,-66.9829));
