@@ -2,6 +2,8 @@
 
 Repurposing AS3 [Red]Regatta into a typescript library
 
+Followed directions from here https://khalilstemmler.com/blogs/typescript/node-starter-project/#:~:text=Compiling%20our%20TypeScript%20To%20compile%20our%20code%2C%20we%27ll,to%20generate%20the%20compiled%20JavaScript%20code.%20npx%20tsc
+
 ## Course
 
 ```

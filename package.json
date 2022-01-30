@@ -7,11 +7,13 @@
   "author": "Fady Khairallah",
   "devDependencies": {
     "@types/node": "^17.0.13",
+    "rimraf": "^3.0.2",
     "typescript": "^4.5.5"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "Test": "echo \"Error: no test specified\" && exit 1",
+    "Build": "tsc",
+    "Clean Build": "rimraf ./build && tsc"
   },
   "repository": {
     "type": "git",
