@@ -1,11 +1,25 @@
 {
   "name": "red-regatta",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Repackage AS3 [RED]Regatta as TypeScript library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Fady Khairallah",
-  "dependencies": {
-    "typescript": "^4.3.0-dev.20210222"
-  }
+  "devDependencies": {
+    "@types/node": "^17.0.13",
+    "typescript": "^4.5.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fkhairallah/red-regatta.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fkhairallah/red-regatta/issues"
+  },
+  "homepage": "https://github.com/fkhairallah/red-regatta#readme"
 }
