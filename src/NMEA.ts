@@ -110,7 +110,7 @@ import {AIS} from"./AIS";
 		this.sentenceCounter++;		// count the sentences
 		
 		// valid if it ends with correct *checksum
-		if (sentence.substr(sentence.indexOf("*")+1,2) != NMEA.calculateCheckSum(sentence) )
+		if (sentence.substring(sentence.indexOf("*")+1,2) != NMEA.calculateCheckSum(sentence) )
 		{
 			this.badSentenceCount++;
 			return;
@@ -131,7 +131,7 @@ import {AIS} from"./AIS";
 		} 
 
 		// split into tokens along comma lines	
-		var tokens:any[] = sentence.substr(0,sentence.indexOf("*")).split(",");
+		var tokens:any[] = sentence.substring(0,sentence.indexOf("*")).split(",");
 
 		// parse known sentences
 		switch ( tokens[0].substring(3) ) 
@@ -598,28 +598,28 @@ import {AIS} from"./AIS";
 			{
 				if (nmeaDate == "") return null;
 				// parse date
-				yy = parseInt(nmeaDate.substr(4,2)) + 2000;
-				mm = parseInt(nmeaDate.substr(2,2))-1;
-				dd = parseInt(nmeaDate.substr(0,2));					
+				yy = parseInt(nmeaDate.substring(4,2)) + 2000;
+				mm = parseInt(nmeaDate.substring(2,2))-1;
+				dd = parseInt(nmeaDate.substring(0,2));					
 			}
 			
 			// parse time
-			var hours:number = parseInt(nmeaTime.substr(0,2)); // hours
-			var minutes:number = parseInt(nmeaTime.substr(2,2)); // minutes
+			var hours:number = parseInt(nmeaTime.substring(0,2)); // hours
+			var minutes:number = parseInt(nmeaTime.substring(2,2)); // minutes
 			if (minutes > 60) return null;
 			
-			var seconds:number = parseInt(nmeaTime.substr(4,2));  // seconds
+			var seconds:number = parseInt(nmeaTime.substring(4,2));  // seconds
 			if ( seconds > 60) return null;
 			
 			var milliseconds:number = 0
 			if (nmeaTime.length == 9)
-				milliseconds = parseInt(nmeaTime.substr(8,2)) * 10;
+				milliseconds = parseInt(nmeaTime.substring(8,2)) * 10;
 
 			
 			t.setUTCFullYear( yy);
 			t.setUTCMonth(mm);
 			t.setUTCMonth(dd);
-			t.setUTCHours(parseInt(nmeaTime.substr(0,2)));
+			t.setUTCHours(parseInt(nmeaTime.substring(0,2)));
 			t.setUTCMinutes(minutes);
 			t.setUTCSeconds(seconds);
 			t.setUTCMilliseconds(milliseconds);
@@ -683,7 +683,7 @@ import {AIS} from"./AIS";
 	public static isValidChecksum(sentence:string):boolean
 	{
 		// valid if it ends with correct *checksum
-		return(sentence.substr(sentence.indexOf("*")+1,2) == NMEA.calculateCheckSum(sentence) )
+		return(sentence.substring(sentence.indexOf("*")+1,2) == NMEA.calculateCheckSum(sentence) )
 	}
 	
 	// utilities used by the class

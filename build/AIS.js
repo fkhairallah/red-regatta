@@ -97,7 +97,7 @@ class AIS {
     parseSentence(sentence) {
         try {
             // split into tokens along comma lines	
-            var tokens = sentence.substr(0, sentence.indexOf("*")).split(",");
+            var tokens = sentence.substring(0, sentence.indexOf("*")).split(",");
             var totalSentences = Math.trunc(tokens[1]);
             var thisSentence = Math.trunc(tokens[2]);
             var messageSequence = Math.trunc(tokens[3]);

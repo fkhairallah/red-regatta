@@ -136,7 +136,7 @@ export class AIS
 		{
 			
 			// split into tokens along comma lines	
-			var tokens:any[] = sentence.substr(0,sentence.indexOf("*")).split(",");
+			var tokens:any[] = sentence.substring(0,sentence.indexOf("*")).split(",");
 			var totalSentences:number = Math.trunc(tokens[1]);
 			var thisSentence:number = Math.trunc(tokens[2]);
 			var messageSequence:number = Math.trunc(tokens[3]);
