@@ -173,7 +173,7 @@ import {AIS} from"../Data/AIS";
 			default:
 				// if (this.badSentenceList.getItemIndex(tokens[0].substring(3)) == -1)
 				// 	this.badSentenceList.push(tokens[0].substring(3));
-				console.log(sentence);
+				//console.log(sentence);
 				break;
 		}
 		
