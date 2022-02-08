@@ -1,52 +1,52 @@
+// NOAA
+export {NoaaStation} from './Model/NoaaStation';
+export {NoaaStationList} from './Model/NoaaStationList';
+export {Owner} from './Model/Owner';
+
 // Course
-export { CourseLayout } from'./CourseLayout';
-export { CourseLeg } from'./CourseLeg';
-export { CourseMark } from'./CourseMark';
-export { Layline } from'./Layline';
-export { Laylines } from'./Laylines';
-export { RaceCourse } from'./RaceCourse';
-export { RaceStatus } from'./RaceStatus';
+export { CourseLayout } from'./Model/Course/CourseLayout';
+export { CourseLeg } from'./Model/Course/CourseLeg';
+export { CourseMark } from'./Model/Course/CourseMark';
+export { Layline } from'./Model/Course/Layline';
+export { Laylines } from'./Model/Course/Laylines';
+export { RaceCourse } from'./Model/Course/RaceCourse';
+export { RaceStatus } from'./Model/Course/RaceStatus';
 
 // Data
-export { AIS } from'./AIS';
-export { AISTarget } from'./AISTarget';
-export { GPSPoint } from'./GPSPoint';
-export { GPX } from './GPX';
-export { NMEA } from'./NMEA';
-export { NMEAEvent } from'./NMEAEvent';
-export { SailPoint } from'./SailPoint';
-export { SailPointEvent } from'./SailPointEvent';
-export { Vessel } from'./Vessel';
-export { VesselStatus } from'./VesselStatus';
+export { AIS } from'./Model/Data/AIS';
+export { AISTarget } from'./Model/Data/AISTarget';
+export { GPSPoint } from'./Model/Data/GPSPoint';
+export { GPX } from './Model/Data/GPX';
+export { NMEA } from'./Model/Data/NMEA';
+export { NMEAEvent } from'./Model/Data/NMEAEvent';
+export { SailPoint } from'./Model/Data/SailPoint';
+export { SailPointEvent } from'./Model/Data/SailPointEvent';
+export { Vessel } from'./Model/Data/Vessel';
+export { VesselStatus } from'./Model/Data/VesselStatus';
 
 // Performance
-export { OffWindTarget } from './OffWindTarget';
-export { PerformancePoint } from './PerformancePoint';
-export { Polars } from './Polars';
-export { PolarTarget } from './PolarTarget';
+export { OffWindTarget } from './Model/Performance/OffWindTarget';
+export { PerformancePoint } from './Model/Performance/PerformancePoint';
+export { Polars } from './Model/Performance/Polars';
+export { PolarTarget } from './Model/Performance/PolarTarget';
 
 // RC
-export { Action } from './Action';
-export { RCMark } from './RCMark';
+export { Action } from './Model/RC/Action';
+export { RCMark } from './Model/RC/RCMark';
 
 // Track
-export { TrackLogger } from './TrackLogger';
-export { TrackSegment } from './TrackSegment';
+export { TrackLogger } from './Model/Track/TrackLogger';
+export { TrackSegment } from './Model/Track/TrackSegment';
 
 // Utilities
-export { Angles } from'./Angles';
-export { Bearing } from'./Bearing';
-export { DateAndTime } from'./DateAndTime';
-export { Distance } from'./Distance';
-export { EuclideanVector } from'./EuclideanVector';
-export { Numeric } from'./Numeric';
-export { Point } from'./Point';
-export { RunningAverage } from'./RunningAverage';
-export { RunningWindAverage } from'./RunningWindAverage';
-export { VectorMath } from'./VectorMath';
-
-// NOAA
-export {NoaaStation} from './NoaaStation';
-export {NoaaStationList} from './NoaaStationList';
-export {Owner} from './Owner';
+export { Angles } from'./Model/Utilities/Angles';
+export { Bearing } from'./Model/Utilities/Bearing';
+export { DateAndTime } from'./Model/Utilities/DateAndTime';
+export { Distance } from'./Model/Utilities/Distance';
+export { EuclideanVector } from'./Model/Utilities/EuclideanVector';
+export { Numeric } from'./Model/Utilities/Numeric';
+export { Point } from'./Model/Utilities/Point';
+export { RunningAverage } from'./Model/Utilities/RunningAverage';
+export { RunningWindAverage } from'./Model/Utilities/RunningWindAverage';
+export { VectorMath } from'./Model/Utilities/VectorMath';
 
