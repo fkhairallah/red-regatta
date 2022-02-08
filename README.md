@@ -2,7 +2,16 @@
 
 Repurposing AS3 [Red]Regatta into a typescript library
 
-Followed directions from here https://khalilstemmler.com/blogs/typescript/node-starter-project/#:~:text=Compiling%20our%20TypeScript%20To%20compile%20our%20code%2C%20we%27ll,to%20generate%20the%20compiled%20JavaScript%20code.%20npx%20tsc
+## Revision History
+
+### V1.1.0
+
+Library design to compile into ./lib and d.ts file generated using the declaration=true in tsconfig.json
+
+Library still uses deprecated .substr at some point it needs to move to .substring but that needs to be done with care and TESTING
+
+### V1.0.0
+Initial migration
 
 ## Course
 
