@@ -1,5 +1,5 @@
 
-import {GPSPoint} from'./Data/GPSPoint';
+import {GPSPoint} from'../Data/GPSPoint';
 
 
 export class NoaaStation {

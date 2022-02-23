@@ -4,6 +4,10 @@ Repurposing AS3 [Red]Regatta into a typescript library
 
 ## Revision History
 
+### V1.2
+
+Added cruise classes to support [Red]Cruiser including UI & Cruise modules
+
 ### V1.1.0
 
 Library design to compile into ./lib and d.ts file generated using the declaration=true in tsconfig.json
@@ -12,6 +16,21 @@ Library still uses deprecated .substr at some point it needs to move to .substri
 
 ### V1.0.0
 Initial migration
+
+## UI
+
+dList -- single list of strings with add, sort & delete
+dGauge -- displays a value with a title and a unit. Flashes warning
+
+## Cruise
+Cruise -- Class to encapsulate cruise parameters
+
+ShipLog -- encapsulates all ship log issues
+LogEntry -- Class for making ship log files
+
+MaintenanceLog -- encapsulates al maintenance related issues
+Equipment -- represents a maintainable component on boat
+MaintenanceAction -- a maintenance action
 
 ## Course
 

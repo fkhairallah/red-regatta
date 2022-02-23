@@ -1,5 +1,5 @@
 //import {ArrayCollection = mx.collections.ArrayCollection;
-import {GPSPoint} from"./Data/GPSPoint";
+import {GPSPoint} from"../Data/GPSPoint";
 import {NoaaStation} from"./NoaaStation";
 
 
