@@ -1,4 +1,4 @@
-import { GPSPoint } from './Data/GPSPoint';
+import { GPSPoint } from '../Data/GPSPoint';
 export declare class NoaaStation {
     name: string;
     state: string;

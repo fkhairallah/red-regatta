@@ -1,7 +1,7 @@
 // NOAA
-export {NoaaStation} from './Model/NoaaStation';
-export {NoaaStationList} from './Model/NoaaStationList';
-export {Owner} from './Model/Owner';
+export {NoaaStation} from './Model/RC/NoaaStation';
+export {NoaaStationList} from './Model/RC/NoaaStationList';
+export {Owner} from './Model/Cruise/Owner';
 
 // Course
 export { CourseLayout } from'./Model/Course/CourseLayout';

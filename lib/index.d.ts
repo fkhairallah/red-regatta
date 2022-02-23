@@ -1,6 +1,6 @@
-export { NoaaStation } from './Model/NoaaStation';
-export { NoaaStationList } from './Model/NoaaStationList';
-export { Owner } from './Model/Owner';
+export { NoaaStation } from './Model/RC/NoaaStation';
+export { NoaaStationList } from './Model/RC/NoaaStationList';
+export { Owner } from './Model/Cruise/Owner';
 export { CourseLayout } from './Model/Course/CourseLayout';
 export { CourseLeg } from './Model/Course/CourseLeg';
 export { CourseMark } from './Model/Course/CourseMark';
