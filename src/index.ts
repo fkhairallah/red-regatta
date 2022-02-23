@@ -1,8 +1,3 @@
-// NOAA
-export {NoaaStation} from './Model/RC/NoaaStation';
-export {NoaaStationList} from './Model/RC/NoaaStationList';
-export {Owner} from './Model/Cruise/Owner';
-
 // Course
 export { CourseLayout } from'./Model/Course/CourseLayout';
 export { CourseLeg } from'./Model/Course/CourseLeg';
@@ -11,6 +6,10 @@ export { Layline } from'./Model/Course/Layline';
 export { Laylines } from'./Model/Course/Laylines';
 export { RaceCourse } from'./Model/Course/RaceCourse';
 export { RaceStatus } from'./Model/Course/RaceStatus';
+
+// Cruise
+export { Cruise } from './Model/Cruise/Cruise';
+export { Owner } from './Model/Cruise/Owner';
 
 // Data
 export { AIS } from'./Model/Data/AIS';
@@ -33,6 +32,9 @@ export { PolarTarget } from './Model/Performance/PolarTarget';
 // RC
 export { Action } from './Model/RC/Action';
 export { RCMark } from './Model/RC/RCMark';
+export {NoaaStation} from './Model/RC/NoaaStation';
+export {NoaaStationList} from './Model/RC/NoaaStationList';
+
 
 // Track
 export { TrackLogger } from './Model/Track/TrackLogger';
