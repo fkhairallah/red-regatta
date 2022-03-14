@@ -22,8 +22,6 @@ export class GPSPoint
 		this.isValid = !(isNaN(this._lat) || isNaN(this._lon));
 		//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.COORDINATES_CHANGED) );
 	}
-		
-
 	
 	public name:string="";
 	public description:string="";
@@ -266,6 +264,14 @@ export class GPSPoint
 	 * Degree/Decimal Minutes (toDMDecimal) DDºMM'.mmm N/S
 	 * 
 	 * ********************************************************************************/
+
+	// given degree, minutes, seconds and compass direction, return a lat or lon number
+	 public static getCoordinateFromDMS(d:number, m:number, s:number, c:string):number
+	 {
+		 let coord =  d + m/60 + s/3600;
+		 if(c=="S" || c=="W") coord = coord * -1;
+		 return coord;
+	 }
 	
 	// formats a coordinate as a Degrees-Minutes-Seconds string 
 	public static toDMS(ptCoord:number):string {

@@ -72,6 +72,7 @@ export declare class GPSPoint {
      * Degree/Decimal Minutes (toDMDecimal) DDºMM'.mmm N/S
      *
      * ********************************************************************************/
+    static getCoordinateFromDMS(d: number, m: number, s: number, c: string): number;
     static toDMS(ptCoord: number): string;
     static toDMDecimal(ptCoord: number): string;
     static parseDMSString(coord: string): number;
