@@ -266,11 +266,34 @@ export class GPSPoint
 	 * ********************************************************************************/
 
 	// given degree, minutes, seconds and compass direction, return a lat or lon number
-	 public static getCoordinateFromDMS(d:number, m:number, s:number, c:string):number
+	 public static convertDMSRtoLatLon(d:number, m:number, s:number, c:string):number
 	 {
 		 let coord =  d + m/60 + s/3600;
 		 if(c=="S" || c=="W") coord = coord * -1;
 		 return coord;
+	 }
+
+	 public static convertLATtoDMSR(ptCoord:number):{degrees:number, minutes:number, seconds:number, direction:string}	{
+		var d:number = Math.trunc(ptCoord);
+		var m:number = Math.trunc((ptCoord-d)*60);
+		var s:number = ((ptCoord-d)*60 - m)* 60;
+		return {
+			degrees:d,
+			minutes:m,
+			seconds:s,
+			direction: (ptCoord < 0) ? "S" : "N"
+		}
+	 }
+	 public static convertLONtoDMSR(ptCoord:number):{degrees:number, minutes:number, seconds:number, direction:string}	{
+		var d:number = Math.trunc(ptCoord);
+		var m:number = Math.trunc((ptCoord-d)*60);
+		var s:number = ((ptCoord-d)*60 - m)* 60;
+		return {
+			degrees:d,
+			minutes:m,
+			seconds:s,
+			direction: (ptCoord < 0) ? "W" : "E"
+		}
 	 }
 	
 	// formats a coordinate as a Degrees-Minutes-Seconds string 
