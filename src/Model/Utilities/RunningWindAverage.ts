@@ -29,7 +29,7 @@ export class RunningWindAverage extends RunningAverage
 	 * routine to do it
 	 *
 	 * ******************************************************************************/ 
-	constructor(smoothingInterval:number=30, pointsToTrack:number=-1)
+	constructor(smoothingInterval:number=30, pointsToTrack:number=10)
 	{
 		super(smoothingInterval, pointsToTrack);
 	}

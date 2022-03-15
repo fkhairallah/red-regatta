@@ -4,6 +4,7 @@ export declare class RunningAverage {
     protected _smoothedValue: number;
     protected smoothedCount: number;
     protected _historicalAverageValue: number;
+    protected historicalCount: number;
     dataHistory: [number];
     protected maxHistoryPoints: number;
     protected interval: number;

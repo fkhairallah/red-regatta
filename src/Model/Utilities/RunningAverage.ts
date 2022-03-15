@@ -13,6 +13,7 @@ export class RunningAverage
 	
 	// historical average & data History
 	protected _historicalAverageValue:number=0;
+	protected historicalCount:number=0;
 	public dataHistory: [number];
 	
 	
@@ -24,7 +25,7 @@ export class RunningAverage
 	 * SmoothingInterval ==> number of entries to average
 	 * pointsToTrack ==> size of buffer (-1 all are saved, 0 none are saved)
 	 ***********************************************************************/
-	constructor(smoothingInterval:number=30, pointsToTrack:number=-1)
+	constructor(smoothingInterval:number=30, pointsToTrack:number=10)
 	{
 		// remember the settings
 		this.interval = smoothingInterval;
@@ -39,6 +40,7 @@ export class RunningAverage
 		this._maxValue = Number.MIN_VALUE;
 		
 		this.dataHistory = [0];
+		this.historicalCount = 0;
 	}
 	
 	// expose internal values to the world
@@ -87,27 +89,26 @@ export class RunningAverage
 		// update min & max if needed
 		if (this.smoothedCount == this.interval)
 		{
-		if (this._minValue > this._smoothedValue) this._minValue = this._smoothedValue;
-		if (this._maxValue < this._smoothedValue)	this._maxValue = this._smoothedValue;
+			if (this._minValue > this._smoothedValue) this._minValue = this._smoothedValue;
+			if (this._maxValue < this._smoothedValue)	this._maxValue = this._smoothedValue;
 		}
 		
+		// calculate the historical average
+		if ( isNaN(this._historicalAverageValue) ) {
+			this._historicalAverageValue = this._smoothedValue;
+		}
+		else {
+			this._historicalAverageValue = 
+				( (this._historicalAverageValue * this.historicalCount) + this._smoothedValue) 
+				/ (this.historicalCount + 1);
+			this.historicalCount++;
+		}
+
+		
 		// add the new average to the history
-		if (this.maxHistoryPoints != 0)
-		{
+		if (this.maxHistoryPoints != 0) {
 			this.dataHistory.push(this._smoothedValue);
-			
-			// now handle the historical average
-			// First time around, set average to first data point
-			if ( isNaN(this._historicalAverageValue) ) 
-			{
-				this._historicalAverageValue = this._smoothedValue;
-			}
-			else
-			{
-				this._historicalAverageValue = ((this._historicalAverageValue * this.dataHistory.length) + this._smoothedValue ) / (this.dataHistory.length + 1);
-			}
-			
-			
+						
 			// limit the history to maxpoints & adjust max/min if needed
 			if ( (this.maxHistoryPoints != -1) && (this.dataHistory.length > this.maxHistoryPoints) )
 			{
