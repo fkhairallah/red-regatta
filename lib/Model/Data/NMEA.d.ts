@@ -3,6 +3,8 @@ import { SailPoint } from "../Data/SailPoint";
 import { AIS } from "../Data/AIS";
 import { EventEmitter } from "events";
 export declare class NMEA extends EventEmitter {
+    static readonly NMEA_EVENT_GPS_DATA = "NMEA_EVENT_GPS_DATA";
+    static readonly NMEA_EVENT_NEW_POINT = "NMEA_EVENT_NEW_POiNT";
     currentData: SailPoint;
     ais: AIS;
     magneticDeclination: number;

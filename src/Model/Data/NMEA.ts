@@ -9,6 +9,8 @@ import { EventEmitter } from "events";
 	
 /*[Bindable]*/export class NMEA extends EventEmitter
 {
+	public static readonly NMEA_EVENT_GPS_DATA = "NMEA_EVENT_GPS_DATA";
+	public static readonly NMEA_EVENT_NEW_POINT = "NMEA_EVENT_NEW_POiNT";
 	
 	public currentData:SailPoint;
 	
@@ -64,7 +66,7 @@ import { EventEmitter } from "events";
 	public newSailPoint(sp:SailPoint):void
 	{
 		this.currentData = sp;
-		this.emit("NewSailPoint", sp);
+		this.emit(NMEA.NMEA_EVENT_GPS_DATA, sp);
 		//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.NEW_SAILPOINT, sp));
 	}
 	
@@ -212,7 +214,7 @@ import { EventEmitter } from "events";
 			}
 			this.currentData.timeStamp = t;
 			this.lastRun = t;
-			this.emit("SailData",this.currentData);
+			this.emit(NMEA.NMEA_EVENT_GPS_DATA,this.currentData);
 			//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.NEW_SAILPOINT, this.currentData));
 			this.trueWindSet = false;
 		}
