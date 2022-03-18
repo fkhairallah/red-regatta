@@ -25,7 +25,7 @@ export class RunningAverage
 	 * SmoothingInterval ==> number of entries to average
 	 * pointsToTrack ==> size of buffer (-1 all are saved, 0 none are saved)
 	 ***********************************************************************/
-	constructor(smoothingInterval:number=30, pointsToTrack:number=10)
+	constructor(smoothingInterval:number=30, pointsToTrack:number=0)
 	{
 		// remember the settings
 		this.interval = smoothingInterval;
