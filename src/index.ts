@@ -17,9 +17,7 @@ export { AISTarget } from'./Model/Data/AISTarget';
 export { GPSPoint } from'./Model/Data/GPSPoint';
 export { GPX } from './Model/Data/GPX';
 export { NMEA } from'./Model/Data/NMEA';
-export { NMEAEvent } from'./Model/Data/NMEAEvent';
 export { SailPoint } from'./Model/Data/SailPoint';
-export { SailPointEvent } from'./Model/Data/SailPointEvent';
 export { Vessel } from'./Model/Data/Vessel';
 export { VesselStatus } from'./Model/Data/VesselStatus';
 

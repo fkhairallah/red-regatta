@@ -4,9 +4,10 @@ import {Numeric} from"../Utilities/Numeric";
 import {GPSPoint} from"../Data/GPSPoint";
 import {SailPoint} from"../Data/SailPoint";
 import {AIS} from"../Data/AIS";
+import { EventEmitter } from "events";
 
 	
-/*[Bindable]*/export class NMEA
+/*[Bindable]*/export class NMEA extends EventEmitter
 {
 	
 	public currentData:SailPoint;
@@ -28,19 +29,19 @@ import {AIS} from"../Data/AIS";
 	private sentenceCounter:number;		// counts sentences
 	private badSentenceList:Array<string>;	// list of sentence we cannot parse
 	private badSentenceCount:number;			// number of malformed sentences
-	private dateStamp:Date;				// date of stream
+	//private dateStamp:Date;				// date of stream
 	
 	constructor(frequencyOfSamplingInSeconds:number=1)
 	{
+		super();	// initialize the emitter class
 		this.ais = new AIS();
 		
-		this.dateStamp = new Date;
+		//this.dateStamp = new Date;
 		
 		this.currentData = new SailPoint();
 		
-		
 		this.frequency = frequencyOfSamplingInSeconds * 1000;	// frequency of sample in milliseconds
-		this.lastRun = new Date;
+		this.lastRun = new Date(0,0,0,0,0,0,0);
 		
 		this.sentenceCounter = 0;
 		
@@ -63,6 +64,7 @@ import {AIS} from"../Data/AIS";
 	public newSailPoint(sp:SailPoint):void
 	{
 		this.currentData = sp;
+		this.emit("NewSailPoint", sp);
 		//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.NEW_SAILPOINT, sp));
 	}
 	
@@ -110,7 +112,8 @@ import {AIS} from"../Data/AIS";
 		this.sentenceCounter++;		// count the sentences
 		
 		// valid if it ends with correct *checksum
-		if (sentence.substr(sentence.indexOf("*")+1,2) != NMEA.calculateCheckSum(sentence) )
+		let n = sentence.indexOf("*")+1;
+		if (sentence.substring(n,n+2) != NMEA.calculateCheckSum(sentence) )
 		{
 			this.badSentenceCount++;
 			return;
@@ -131,7 +134,7 @@ import {AIS} from"../Data/AIS";
 		} 
 
 		// split into tokens along comma lines	
-		var tokens:any[] = sentence.substr(0,sentence.indexOf("*")).split(",");
+		var tokens:any[] = sentence.substring(0,sentence.indexOf("*")).split(",");
 
 		// parse known sentences
 		switch ( tokens[0].substring(3) ) 
@@ -193,7 +196,7 @@ import {AIS} from"../Data/AIS";
 		// time that we use is either local time which is always present, or GPS time which depends the on $RMC sentence
 		// when parsing a log file, we MUST use GPS otherwise we cannot advance the time.
 		if (this.useGPSClock)
-			t = this.dateStamp;
+			t = this.currentData.timeStamp;
 		else
 			t = new Date;
 		
@@ -209,6 +212,7 @@ import {AIS} from"../Data/AIS";
 			}
 			this.currentData.timeStamp = t;
 			this.lastRun = t;
+			this.emit("SailData",this.currentData);
 			//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.NEW_SAILPOINT, this.currentData));
 			this.trueWindSet = false;
 		}
@@ -293,7 +297,7 @@ import {AIS} from"../Data/AIS";
 			this.currentData.speedOverGround = parseFloat(tokens[7]);
 			this.currentData.courseOverGround = parseFloat(tokens[8]);
 			
-			this.dateStamp = NMEA.parseNMEATimeAndDate(tokens[1],tokens[9]);
+			this.currentData.timeStamp = NMEA.parseNMEATimeAndDate(tokens[1],tokens[9]);
 			
 			if (tokens[1] == "A" )	// tokens[1] validity: a-OK, v-warning) 
 				return false;

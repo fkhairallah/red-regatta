@@ -1,6 +1,8 @@
+/// <reference types="node" />
 import { SailPoint } from "../Data/SailPoint";
 import { AIS } from "../Data/AIS";
-export declare class NMEA {
+import { EventEmitter } from "events";
+export declare class NMEA extends EventEmitter {
     currentData: SailPoint;
     ais: AIS;
     magneticDeclination: number;
@@ -10,7 +12,6 @@ export declare class NMEA {
     private sentenceCounter;
     private badSentenceList;
     private badSentenceCount;
-    private dateStamp;
     constructor(frequencyOfSamplingInSeconds?: number);
     loadFromObject(o: any): void;
     newSailPoint(sp: SailPoint): void;
