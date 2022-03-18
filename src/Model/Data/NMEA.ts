@@ -608,7 +608,7 @@ import {AIS} from"../Data/AIS";
 			var minutes:number = parseInt(nmeaTime.substring(2,4)); // minutes
 			if (minutes > 60) return null;
 			
-			var seconds:number = parseInt(nmeaTime.substring(4,4));  // seconds
+			var seconds:number = parseInt(nmeaTime.substring(4,6));  // seconds
 			if ( seconds > 60) return null;
 			
 			var milliseconds:number = 0
