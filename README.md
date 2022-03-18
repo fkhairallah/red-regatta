@@ -4,6 +4,10 @@ Repurposing AS3 [Red]Regatta into a typescript library
 
 ## Revision History
 
+### V1.3
+
+Date bug fix in parseNMEATimeAndDate. Minor tweaks.
+
 ### V1.2
 
 Added cruise classes to support [Red]Cruiser
