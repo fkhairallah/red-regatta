@@ -6,7 +6,12 @@ Repurposing AS3 [Red]Regatta into a typescript library
 
 ### V1.3
 
-Date bug fix in parseNMEATimeAndDate. Fix bug with GPS time not getting stored in SailPoint. Replaced AS3 events with NodeJS EventEmitter. Replaced substr with substring. Minor tweaks.
+- Added Cruise-Contol Classes. 
+- Date bug fix in parseNMEATimeAndDate. 
+- Fix bug with GPS time not getting stored in SailPoint. 
+- Replaced AS3 events with NodeJS EventEmitter. 
+- Replaced substr with substring. 
+- Minor tweaks.
 
 ### V1.2
 

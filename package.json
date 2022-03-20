@@ -25,6 +25,9 @@
   },
   "homepage": "https://github.com/fkhairallah/red-regatta#readme",
   "dependencies": {
+    "@types/node-persist": "^3.1.2",
+    "date-fns": "^2.28.0",
+    "node-persist": "^3.1.0",
     "tslib": "^2.3.1"
   }
 }
