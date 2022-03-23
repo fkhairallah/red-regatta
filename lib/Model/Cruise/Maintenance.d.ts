@@ -1,26 +1,29 @@
-export declare type Equipment = {
+export declare class Equipment {
     UID: string;
     name: string;
     description: string;
     notes: string;
-    dateInstalled: string;
+    dateInstalled: Date;
+    trackHours: boolean;
     hours: number;
-    hoursLastUpdated?: string;
+    hoursLastUpdated: Date;
     serialNumber: string;
     modules: Module[];
     documents?: string;
-};
-export declare type Module = {
+    constructor(o: any);
+}
+export declare class Module {
     UID: string;
     name: string;
     description: string;
     repeatable: boolean;
     timeInterval: number;
     hourInterval: number;
-    lastServiceDate: string;
+    lastServiceDate: Date;
     lastServiceHours: number;
-};
-export declare type Service = {
+    constructor(o: any);
+}
+export declare class Service {
     UID: string;
     equipmentUID: string;
     equipmentName: string;
@@ -28,18 +31,18 @@ export declare type Service = {
     moduleName: string;
     description: string;
     notes: string;
-    date: string;
+    date: Date;
     hours: number;
-};
+    constructor(o: any);
+}
 export declare class ShipMaintenance {
     equipment: Equipment[];
     serviceRecords: Service[];
     constructor();
     loadFromStorage(): Promise<void>;
-    getEquipment(): Promise<any>;
-    getServiceRecords(): Promise<any>;
     addServiceRecord(service: Service): Promise<void>;
     updateEquipment(equipment: Equipment): Promise<void>;
+    updateHours(equipment: Equipment[]): Promise<void>;
     deleteEquipment(equipmentUID: string): Promise<void>;
     getServiceSummary(): any;
     getNextService(toDate: Date): Service[];

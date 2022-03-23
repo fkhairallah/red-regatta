@@ -7,7 +7,7 @@ export interface WatchBlock {
 export declare class ShipWatch {
     locked: Boolean;
     crewList: string[];
-    startDate: string;
+    startDate: Date;
     hoursInWatch: number;
     captainsHour: number;
     watchList: WatchBlock[];

@@ -16,7 +16,7 @@ export class ShipWatch {
     public locked: Boolean = false;
 
     public crewList: string[];
-    public startDate: string;
+    public startDate: Date;
     public hoursInWatch: number;
     public captainsHour: number;
     public watchList: WatchBlock[];
@@ -28,7 +28,7 @@ export class ShipWatch {
         // initialize everything to empty strings
         this.crewList = []; // list of crew names
         this.watchList = [];    // list of watches (start, end, reserved)
-        this.startDate = formatISO(new Date(), { representation: "date" });;
+        this.startDate = new Date(); // formatISO(new Date(), { representation: "date" });;
         this.hoursInWatch = 2;
         this.captainsHour = 18;
         this.noRotation = false;
@@ -37,7 +37,7 @@ export class ShipWatch {
         // if param passed ==> use it to populate the object
         if (srcObject) {
             this.crewList = srcObject.crewList;
-            this.startDate = srcObject.startDate;
+            this.startDate = new Date(srcObject.startDate);
             this.hoursInWatch = srcObject.hoursInWatch;
             this.captainsHour = srcObject.captainsHour;
             this.watchList = srcObject.watchList;
@@ -78,7 +78,7 @@ export class ShipWatch {
 
     // return list dates for a specified cruise duration
     public getDates(cruiseDuration: number): String[] {
-        let newDate = new Date(this.startDate);
+        let newDate:Date = new Date(this.startDate);
         let dates: String[] = [];
         for (let i = 0; i < cruiseDuration; i++) {
             let dateString: String = format(newDate, "eee do");
@@ -150,7 +150,7 @@ export class ShipWatch {
     // get watch list for the specified date and the next n Days
     public getDateSchedule(myDate: Date, lengthInDays: number = 1): WatchBlock[] {
         let watchCrew: WatchBlock[] = [];
-        let numberOfDays: number = differenceInDays(myDate, new Date(this.startDate));
+        let numberOfDays: number = differenceInDays(myDate, this.startDate);
         let numberOfCrewWatches = this.watchList.filter((item: WatchBlock) => { return !item.reserved }).length;
         let watchIndex: number = (numberOfDays * numberOfCrewWatches) % this.crewList.length;
         for (let j = 0; j < lengthInDays; j++) {
