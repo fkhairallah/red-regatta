@@ -35,15 +35,3 @@ export declare class Service {
     hours: number;
     constructor(o: any);
 }
-export declare class ShipMaintenance {
-    equipment: Equipment[];
-    serviceRecords: Service[];
-    constructor();
-    loadFromStorage(): Promise<void>;
-    addServiceRecord(service: Service): Promise<void>;
-    updateEquipment(equipment: Equipment): Promise<void>;
-    updateHours(equipment: Equipment[]): Promise<void>;
-    deleteEquipment(equipmentUID: string): Promise<void>;
-    getServiceSummary(): any;
-    getNextService(toDate: Date): Service[];
-}
