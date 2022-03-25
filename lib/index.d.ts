@@ -39,4 +39,4 @@ export { Equipment, Module, Service } from './Model/Cruise/Maintenance';
 export { PeriodStats } from './Model/Cruise/PeriodStats';
 export { LogEntry } from './Model/Cruise/shiplog';
 export { WatchBlock, ShipWatch } from './Model/Cruise/ShipWatch';
-export { Destination, Voyage } from './Model/Cruise/Voyage';
+export { Voyage } from './Model/Cruise/Voyage';

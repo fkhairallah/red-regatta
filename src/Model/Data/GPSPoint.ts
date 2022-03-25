@@ -1,40 +1,38 @@
-import { Angles} from'../Utilities/Angles';
-import {Point} from'../Utilities/Point';
+import { Angles } from'../Utilities/Angles';
+import { Point } from'../Utilities/Point';
 
 export class GPSPoint
 {
-	protected _lat:number=0;
-	protected _lon:number=0;
+	lat:number=0;
+	lon:number=0;
 	
-	public get lat():number
-	{return this._lat;}
-	public get lon():number
-	{return this._lon;}
-	public set lat(l:number)
-	{
-		this._lat = l;
-		this.isValid = !(isNaN(this._lat) || isNaN(this._lon));
-		//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.COORDINATES_CHANGED));
-	}
-	public set lon(l:number)
-	{
-		this._lon = l;
-		this.isValid = !(isNaN(this._lat) || isNaN(this._lon));
-		//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.COORDINATES_CHANGED) );
-	}
+	// public get lat():number
+	// {return this._lat;}
+	// public get lon():number
+	// {return this._lon;}
+	// public set lat(l:number)
+	// {
+	// 	this._lat = l;
+	// 	this.isValid = !(isNaN(this._lat) || isNaN(this._lon));
+	// 	//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.COORDINATES_CHANGED));
+	// }
+	// public set lon(l:number)
+	// {
+	// 	this._lon = l;
+	// 	this.isValid = !(isNaN(this._lat) || isNaN(this._lon));
+	// 	//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.COORDINATES_CHANGED) );
+	// }
 	
 	public name:string="";
 	public description:string="";
-	public timeStamp:Date= new Date;
+	public timeStamp:Date= new Date();
 	public isValid:boolean=false;
 	
 	private static R:number=3440; // Radius of the earth in NM
 	public static nmd:number = GPSPoint.R/360; // NM per degree
 	
-	constructor(o:any=null,myLat:number=0,myLon:number=0)
+	constructor(o?:any)
 	{
-		this.lat = myLat;
-		this.lon = myLon;
 
 		if (o) this.loadFromObject(o);
 	}
@@ -49,12 +47,14 @@ export class GPSPoint
 		{
 			this.name = o.name;
 			this.description = o.description;
-			this._lat = o.lat;
-			this._lon = o.lon;
-			this.isValid = !(isNaN(this._lat) || isNaN(this._lon));
-			this.timeStamp = o.timeStamp;
+			this.lat = o.lat;
+			this.lon = o.lon;
+			this.isValid = !(isNaN(this.lat) || isNaN(this.lon));
+			this.timeStamp = new Date(o.timeStamp);
 			//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.COORDINATES_CHANGED));
-		} catch (err) {}
+		} catch (err) {
+			console.error("Error loading GPSPoint from object: " + err);
+		}
 
 	}
 
@@ -220,6 +220,53 @@ export class GPSPoint
 			
 
 	}
+
+
+	/************************************************************************************
+	 * 
+	 * These routine will update lan/lon from decimal to component parts (Degree, minutes, seconds, direction)
+	 * 
+	 * 
+	 * ********************************************************************************/
+
+		// given degree, minutes, seconds and compass direction, return a lat or lon number
+		public setLATfromDMS(d:number, m:number, s:number, c:string)
+		{
+			let coord =  d + m/60 + s/3600;
+			if(c=="S" || c=="W") coord = coord * -1;
+			this.lat =  coord;
+		}
+		public setLONfromDMS(d:number, m:number, s:number, c:string)
+		{
+			let coord =  d + m/60 + s/3600;
+			if(c=="S" || c=="W") coord = coord * -1;
+			this.lon =  coord;
+		}
+      
+		public getLATinDMS():{degrees:number, minutes:number, seconds:number, direction:string}	{
+			let lat = Math.abs(this.lat);
+		   let d:number = Math.trunc(lat);
+		   let m:number = Math.trunc((lat-d)*60);
+		   let s:number = ((lat-d)*60 - m)* 60;
+		   return {
+			   degrees:d,
+			   minutes:m,
+			   seconds:s,
+			   direction: (this.lat < 0) ? "S" : "N"
+		   }
+		}
+		public getLONinDMS():{degrees:number, minutes:number, seconds:number, direction:string}	{
+			let lon:number = Math.abs(this.lon);
+		   let d:number = Math.trunc(lon);
+		   let m:number = Math.trunc((lon-d)*60);
+		   let s:number = ((lon-d)*60 - m)* 60;
+		   return {
+			   degrees:d,
+			   minutes:m,
+			   seconds:s,
+			   direction: (this.lon < 0) ? "W" : "E"
+		   }
+		}
 	
 	/************************************************************************************
 	 * 
@@ -265,36 +312,7 @@ export class GPSPoint
 	 * 
 	 * ********************************************************************************/
 
-	// given degree, minutes, seconds and compass direction, return a lat or lon number
-	 public static convertDMSRtoLatLon(d:number, m:number, s:number, c:string):number
-	 {
-		 let coord =  d + m/60 + s/3600;
-		 if(c=="S" || c=="W") coord = coord * -1;
-		 return coord;
-	 }
 
-	 public static convertLATtoDMSR(ptCoord:number):{degrees:number, minutes:number, seconds:number, direction:string}	{
-		var d:number = Math.trunc(ptCoord);
-		var m:number = Math.trunc((ptCoord-d)*60);
-		var s:number = ((ptCoord-d)*60 - m)* 60;
-		return {
-			degrees:d,
-			minutes:m,
-			seconds:s,
-			direction: (ptCoord < 0) ? "S" : "N"
-		}
-	 }
-	 public static convertLONtoDMSR(ptCoord:number):{degrees:number, minutes:number, seconds:number, direction:string}	{
-		var d:number = Math.trunc(ptCoord);
-		var m:number = Math.trunc((ptCoord-d)*60);
-		var s:number = ((ptCoord-d)*60 - m)* 60;
-		return {
-			degrees:d,
-			minutes:m,
-			seconds:s,
-			direction: (ptCoord < 0) ? "W" : "E"
-		}
-	 }
 	
 	// formats a coordinate as a Degrees-Minutes-Seconds string 
 	public static toDMS(ptCoord:number):string {

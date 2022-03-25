@@ -25,7 +25,7 @@ export declare class RunningWindAverage extends RunningAverage {
      * routine to do it
      *
      * ******************************************************************************/
-    constructor(smoothingInterval?: number, pointsToTrack?: number);
+    constructor(smoothingInterval?: number, pointsToTrack?: number, o?: any);
     get maxValue(): number;
     get minValue(): number;
     get smoothedValue(): number;

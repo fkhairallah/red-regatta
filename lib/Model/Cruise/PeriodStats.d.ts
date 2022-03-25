@@ -13,7 +13,8 @@ export declare class PeriodStats {
     speedOverGround: RunningAverage;
     trueWindSpeed: RunningAverage;
     trueWindDirection: RunningWindAverage;
-    constructor(name: string);
+    constructor(o?: any);
+    loadFromObject(o: any): void;
     addPoint(point: SailPoint): void;
     finalize(date: Date): void;
     getSummaryData(): any;

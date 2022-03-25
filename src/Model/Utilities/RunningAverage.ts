@@ -25,7 +25,7 @@ export class RunningAverage
 	 * SmoothingInterval ==> number of entries to average
 	 * pointsToTrack ==> size of buffer (-1 all are saved, 0 none are saved)
 	 ***********************************************************************/
-	constructor(smoothingInterval:number=30, pointsToTrack:number=0)
+	constructor(smoothingInterval:number=30, pointsToTrack:number=0, o?:any)
 	{
 		// remember the settings
 		this.interval = smoothingInterval;
@@ -41,7 +41,24 @@ export class RunningAverage
 		
 		this.dataHistory = [0];
 		this.historicalCount = 0;
+
+		this.loadFromObject(o);
 	}
+
+	loadFromObject(o:any) {
+		if (o) {
+			this._maxValue	= o._maxValue;
+			this._minValue	= o._minValue;
+			this._smoothedValue	= o._smoothedValue;
+			this.smoothedCount	= o.smoothedCount;
+			this._historicalAverageValue	= o._historicalAverageValue;
+			this.historicalCount	= o.historicalCount;
+			this.dataHistory	= o.dataHistory;
+			this.maxHistoryPoints = o.maxHistoryPoints;
+			this.interval = o.interval;
+		}
+	}
+
 	
 	// expose internal values to the world
 	public get maxValue():number

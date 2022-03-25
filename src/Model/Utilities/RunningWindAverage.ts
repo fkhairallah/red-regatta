@@ -29,9 +29,9 @@ export class RunningWindAverage extends RunningAverage
 	 * routine to do it
 	 *
 	 * ******************************************************************************/ 
-	constructor(smoothingInterval:number=30, pointsToTrack:number=10)
+	constructor(smoothingInterval:number=30, pointsToTrack:number=10, o?:any)
 	{
-		super(smoothingInterval, pointsToTrack);
+		super(smoothingInterval, pointsToTrack, o);
 	}
 	
 	/*override*/ public get maxValue():number

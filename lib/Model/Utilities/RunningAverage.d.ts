@@ -12,7 +12,8 @@ export declare class RunningAverage {
      * SmoothingInterval ==> number of entries to average
      * pointsToTrack ==> size of buffer (-1 all are saved, 0 none are saved)
      ***********************************************************************/
-    constructor(smoothingInterval?: number, pointsToTrack?: number);
+    constructor(smoothingInterval?: number, pointsToTrack?: number, o?: any);
+    loadFromObject(o: any): void;
     get maxValue(): number;
     get minValue(): number;
     get smoothedValue(): number;

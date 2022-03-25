@@ -63,8 +63,8 @@ import {Distance} from'../Utilities/Distance';
 		if (this.relativePoint != null) 
 		{				
 			var newpoint:GPSPoint = this.relativePoint.movePoint(this.relativeRange,this.relativeBearing);
-			this._lat = newpoint.lat;
-			this._lon = newpoint.lon;
+			this.lat = newpoint.lat;
+			this.lon = newpoint.lon;
 			//this.dispatchEvent(new SailPointEvent(SailPointEvent.COORDINATES_CHANGED));
 		}
 	}
@@ -102,8 +102,8 @@ import {Distance} from'../Utilities/Distance';
 		}
 		else
 		{
-			this._lat = o.lat;
-			this._lon = o.lon;
+			this.lat = o.lat;
+			this.lon = o.lon;
 		}
 		//this.dispatchEvent(new SailPointEvent(SailPointEvent.COORDINATES_CHANGED));
 	}

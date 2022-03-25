@@ -4,28 +4,37 @@ import { RunningAverage } from "../Utilities/RunningAverage";
 import { RunningWindAverage } from "../Utilities/RunningWindAverage";
 
 export class PeriodStats {
-    inProgress: boolean;
-    name: string;
+    inProgress: boolean = true;
+    name: string = "";
     startTime?: Date;
     endTime?: Date;
-    startLocation: GPSPoint;
-    endLocation: GPSPoint;
-    distance: number;
+    startLocation: GPSPoint = new GPSPoint();
+    endLocation: GPSPoint = new GPSPoint();
+    distance: number = 0;
 
-    speedOverGround: RunningAverage;
-    trueWindSpeed: RunningAverage;
-    trueWindDirection: RunningWindAverage;
+    speedOverGround: RunningAverage = new RunningAverage(30, 0);
+    trueWindSpeed: RunningAverage = new RunningAverage(30, 0);
+    trueWindDirection: RunningWindAverage = new RunningWindAverage(30, 0);
 
-    constructor (name: string) {
-        //console.log("Creating PeriodStats: " + name );
-        this.name = name;
-        this.startLocation = new GPSPoint();
-        this.endLocation = new GPSPoint();
-        this.distance = 0;
-        this.speedOverGround = new RunningAverage(30,0);
-        this.trueWindSpeed = new RunningAverage(30,0);
-        this.trueWindDirection = new RunningWindAverage(30,0);
-        this.inProgress = true;
+    constructor(o?: any) {
+        if (o) this.loadFromObject(o);
+    }
+    loadFromObject(o: any) {
+        try {
+            this.inProgress = o.inProgress;
+            this.name = o.name;
+            this.startTime = new Date(o.startTime);
+            this.endTime = new Date(o.endTime);
+            this.startLocation = new GPSPoint(o.startLocation);
+            this.endLocation = new GPSPoint(o.endLocation);
+            this.distance = o.distance;
+            this.speedOverGround = new RunningAverage(30, 0, o.speedOverGround);
+            this.trueWindSpeed = new RunningAverage(30, 0, o.trueWindSpeed);
+            this.trueWindDirection = new RunningWindAverage(30, 0, o.trueWindDirection);
+        }
+        catch (e) {
+            console.error("Error loading PeriodStats: " + e);
+        }
     }
 
     addPoint(point: SailPoint) {
@@ -54,15 +63,14 @@ export class PeriodStats {
         this.trueWindDirection.updateDataPoint(point.trueWindDirection);
     }
 
-    finalize(date:Date) {
-        //console.log("Finalizing PeriodStats: " + this.name + " " + this.endLocation.lat + " " + this.endLocation.lon + " Distance: " + this.distance);
+    finalize(date: Date) {
         this.inProgress = false;
         this.endTime = date;
     }
 
 
-    getSummaryData():any {
-        let summary:any = {};
+    getSummaryData(): any {
+        let summary: any = {};
         summary.name = this.name;
         summary.avgSOG = this.speedOverGround.historicalAverageValue.toFixed(1);
         summary.maxSOG = this.speedOverGround.maxValue.toFixed(1);

@@ -1,18 +1,14 @@
 import { Point } from '../Utilities/Point';
 export declare class GPSPoint {
-    protected _lat: number;
-    protected _lon: number;
-    get lat(): number;
-    get lon(): number;
-    set lat(l: number);
-    set lon(l: number);
+    lat: number;
+    lon: number;
     name: string;
     description: string;
     timeStamp: Date;
     isValid: boolean;
     private static R;
     static nmd: number;
-    constructor(o?: any, myLat?: number, myLon?: number);
+    constructor(o?: any);
     loadFromObject(o: any): void;
     distanceTo(location: GPSPoint): number;
     bearingTo(location: GPSPoint): number;
@@ -51,6 +47,26 @@ export declare class GPSPoint {
     static getIntersection(p1: GPSPoint, brng1: number, p2: GPSPoint, brng2: number): any;
     /************************************************************************************
      *
+     * These routine will update lan/lon from decimal to component parts (Degree, minutes, seconds, direction)
+     *
+     *
+     * ********************************************************************************/
+    setLATfromDMS(d: number, m: number, s: number, c: string): void;
+    setLONfromDMS(d: number, m: number, s: number, c: string): void;
+    getLATinDMS(): {
+        degrees: number;
+        minutes: number;
+        seconds: number;
+        direction: string;
+    };
+    getLONinDMS(): {
+        degrees: number;
+        minutes: number;
+        seconds: number;
+        direction: string;
+    };
+    /************************************************************************************
+     *
      * These routine will return the gps points lat/lon formatted the proper way.
      *
      * As such:
@@ -72,19 +88,6 @@ export declare class GPSPoint {
      * Degree/Decimal Minutes (toDMDecimal) DDºMM'.mmm N/S
      *
      * ********************************************************************************/
-    static convertDMSRtoLatLon(d: number, m: number, s: number, c: string): number;
-    static convertLATtoDMSR(ptCoord: number): {
-        degrees: number;
-        minutes: number;
-        seconds: number;
-        direction: string;
-    };
-    static convertLONtoDMSR(ptCoord: number): {
-        degrees: number;
-        minutes: number;
-        seconds: number;
-        direction: string;
-    };
     static toDMS(ptCoord: number): string;
     static toDMDecimal(ptCoord: number): string;
     static parseDMSString(coord: string): number;
