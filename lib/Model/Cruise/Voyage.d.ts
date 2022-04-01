@@ -1,6 +1,7 @@
 import { GPSPoint } from '../Data/GPSPoint';
 import { PeriodStats } from './PeriodStats';
 export declare class Voyage {
+    underway: boolean;
     startTime: Date;
     voyageName: string;
     destination: GPSPoint;
@@ -11,7 +12,7 @@ export declare class Voyage {
     timeToDestination: number;
     voyageStats: PeriodStats;
     dayStats: PeriodStats;
-    allDaysStats: PeriodStats[];
+    segmentStats: PeriodStats[];
     constructor(o?: any);
     loadFromObject(o: any): void;
 }

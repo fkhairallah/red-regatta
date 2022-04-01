@@ -4,8 +4,9 @@ import { PeriodStats } from './PeriodStats';
 
 export class Voyage {
 
+    underway: boolean = false;
     startTime: Date = new Date();
-    voyageName: string = "At Port";
+    voyageName: string = "";
     destination: GPSPoint = new GPSPoint();
     estimatedDTD: number = 0;
     estimatedTTD: number = 0;
@@ -15,7 +16,7 @@ export class Voyage {
     timeToDestination: number = 0;
     voyageStats: PeriodStats = new PeriodStats();
     dayStats: PeriodStats = new PeriodStats;
-    allDaysStats: PeriodStats[] = [];
+    segmentStats: PeriodStats[] = [];
 
     constructor(o?: any) {
         if (o) {
@@ -24,7 +25,7 @@ export class Voyage {
             this.destination.name = "Milford Harbor";
             this.destination.lat = 41.230698;
             this.destination.lon = -73.068894;
-            this.currentLocation.name = "Milford Harbor";
+            this.currentLocation.name = "Maverick";
             this.currentLocation.lat = 41.230698;
             this.currentLocation.lon = -73.068894;
         }
@@ -32,8 +33,9 @@ export class Voyage {
 
     loadFromObject(o: any) {
         if (o) {
-            this.voyageName = o.voyageName;
+            this.underway = o.underway;
             this.startTime = new Date(o.startTime);
+            this.voyageName = o.voyageName;
             this.destination = new GPSPoint(o.destination);
             this.estimatedDTD = o.estimatedDTD;
             this.estimatedTTD = o.estimatedTTD;
@@ -42,8 +44,8 @@ export class Voyage {
             this.timeToDestination = o.timeToDestination;
             this.voyageStats = new PeriodStats(o.voyageStats);
             this.dayStats = new PeriodStats(o.dayStats);
-            if (o.allDaysStats)
-                o.allDaysStats.forEach((day: any) => { this.allDaysStats.push(new PeriodStats(day)) });
+            if (o.segmentStats)
+                o.segmentStats.forEach((day: any) => { this.segmentStats.push(new PeriodStats(day)) });
         }
     }
 

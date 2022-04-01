@@ -5,10 +5,10 @@ export declare class GPSPoint {
     name: string;
     description: string;
     timeStamp: Date;
-    isValid: boolean;
     private static R;
     static nmd: number;
     constructor(o?: any);
+    get isValid(): boolean;
     loadFromObject(o: any): void;
     distanceTo(location: GPSPoint): number;
     bearingTo(location: GPSPoint): number;

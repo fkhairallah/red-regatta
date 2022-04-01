@@ -3,8 +3,8 @@ import { Point } from'../Utilities/Point';
 
 export class GPSPoint
 {
-	lat:number=0;
-	lon:number=0;
+	lat:number=Number.NaN;
+	lon:number=Number.NaN;
 	
 	// public get lat():number
 	// {return this._lat;}
@@ -26,7 +26,7 @@ export class GPSPoint
 	public name:string="";
 	public description:string="";
 	public timeStamp:Date= new Date();
-	public isValid:boolean=false;
+	//public isValid:boolean=false;
 	
 	private static R:number=3440; // Radius of the earth in NM
 	public static nmd:number = GPSPoint.R/360; // NM per degree
@@ -35,6 +35,10 @@ export class GPSPoint
 	{
 
 		if (o) this.loadFromObject(o);
+	}
+
+	get isValid():boolean {
+		return !(!this.lat || isNaN(this.lat) || !this.lon || isNaN(this.lon) || ((this.lat==0) && (this.lon==0)));
 	}
 	
 	// loadFromObject loads _lat & _lon instead of lat/long to avoid double
@@ -49,7 +53,7 @@ export class GPSPoint
 			this.description = o.description;
 			this.lat = o.lat;
 			this.lon = o.lon;
-			this.isValid = !(isNaN(this.lat) || isNaN(this.lon));
+			//this.isValid = !(isNaN(this.lat) || isNaN(this.lon));
 			this.timeStamp = new Date(o.timeStamp);
 			//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.COORDINATES_CHANGED));
 		} catch (err) {
@@ -248,6 +252,7 @@ export class GPSPoint
 		   let d:number = Math.trunc(lat);
 		   let m:number = Math.trunc((lat-d)*60);
 		   let s:number = ((lat-d)*60 - m)* 60;
+		   s = Math.round(s*10)/10;	// return 1 decimal place
 		   return {
 			   degrees:d,
 			   minutes:m,
@@ -260,6 +265,7 @@ export class GPSPoint
 		   let d:number = Math.trunc(lon);
 		   let m:number = Math.trunc((lon-d)*60);
 		   let s:number = ((lon-d)*60 - m)* 60;
+		   s = Math.round(s*10)/10;	// return 1 decimal place
 		   return {
 			   degrees:d,
 			   minutes:m,
