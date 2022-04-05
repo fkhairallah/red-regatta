@@ -40,9 +40,8 @@ export class PeriodStats {
     addPoint(point: SailPoint) {
 
         // first point? initialize
-        if (this.startTime === undefined) {
+        if (this.startLocation.isValid == false) {
             this.startTime = point.timeStamp;
-            console.log(this.name, ": Starting at: " + this.startTime);
             this.startLocation.lat = point.lat;
             this.startLocation.lon = point.lon;
             this.endLocation.lat = point.lat;

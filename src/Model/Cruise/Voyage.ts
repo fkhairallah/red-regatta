@@ -1,4 +1,5 @@
 import { GPSPoint } from '../Data/GPSPoint';
+import { RunningAverage } from '../Utilities/RunningAverage';
 import { PeriodStats } from './PeriodStats';
 
 
@@ -16,6 +17,7 @@ export class Voyage {
     timeToDestination: number = 0;
     voyageStats: PeriodStats = new PeriodStats();
     dayStats: PeriodStats = new PeriodStats;
+    dayDistance: RunningAverage= new RunningAverage(1,0);
     segmentStats: PeriodStats[] = [];
 
     constructor(o?: any) {
@@ -44,6 +46,7 @@ export class Voyage {
             this.timeToDestination = o.timeToDestination;
             this.voyageStats = new PeriodStats(o.voyageStats);
             this.dayStats = new PeriodStats(o.dayStats);
+            this.dayDistance = new RunningAverage(1,0,o.dayDistance);
             if (o.segmentStats)
                 o.segmentStats.forEach((day: any) => { this.segmentStats.push(new PeriodStats(day)) });
         }
