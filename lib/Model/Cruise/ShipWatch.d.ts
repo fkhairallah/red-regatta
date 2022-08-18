@@ -15,8 +15,8 @@ export declare class ShipWatch {
     crewOnWatch: string;
     constructor(srcObject?: any);
     setupWatch(): void;
-    getDates(cruiseDuration: number): String[];
-    getWatchList(cruiseDuration: number): String[][];
+    getDates(cruiseDuration: number): string[];
+    getWatchList(cruiseDuration: number): string[][];
     getWatchNumber(date: Date): number;
     getNext24Hours(): WatchBlock[];
     getDateSchedule(myDate: Date, lengthInDays?: number): WatchBlock[];

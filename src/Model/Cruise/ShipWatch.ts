@@ -77,11 +77,11 @@ export class ShipWatch {
     }
 
     // return list dates for a specified cruise duration
-    public getDates(cruiseDuration: number): String[] {
+    public getDates(cruiseDuration: number): string[] {
         let newDate:Date = new Date(this.startDate);
-        let dates: String[] = [];
+        let dates: string[] = [];
         for (let i = 0; i < cruiseDuration; i++) {
-            let dateString: String = format(newDate, "eee do");
+            let dateString: string = format(newDate, "eee do");
             dates.push(dateString);
             newDate.setDate((newDate.getDate() + 1));
         }
@@ -90,9 +90,9 @@ export class ShipWatch {
 
     // return a list of crew names based on a cruise duration
     // list is returned as a double array suitable for dispaying in a table
-    public getWatchList(cruiseDuration: number): String[][] {
+    public getWatchList(cruiseDuration: number): string[][] {
         // watchCrew[day of watch][watch number] = crew name
-        let watchCrew: String[][] = [];
+        let watchCrew: string[][] = [];
 
         // fill the array with empty strings
         for (let i = 0; i < this.watchList.length; i++) {
