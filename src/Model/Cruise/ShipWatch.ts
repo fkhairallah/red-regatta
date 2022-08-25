@@ -15,36 +15,29 @@ export class ShipWatch {
     // locks the ShipWatch class so it cannot be modified
     public locked: Boolean = false;
 
-    public crewList: string[];
-    public startDate: Date;
-    public hoursInWatch: number;
-    public captainsHour: number;
-    public watchList: WatchBlock[];
-    public noRotation: boolean;
-    public crewOnWatch: string;
+    public crewList: string[] = [];
+    public startDate: Date = new Date();
+    public hoursInWatch: number = 2;
+    public captainsHour: number = 18;
+    public watchList: WatchBlock[] = [];
+    public noRotation: boolean = false;
+    public crewOnWatch: string = "";
 
     constructor(srcObject?: any) {
 
-        // initialize everything to empty strings
-        this.crewList = []; // list of crew names
-        this.watchList = [];    // list of watches (start, end, reserved)
-        this.startDate = new Date(); // formatISO(new Date(), { representation: "date" });;
-        this.hoursInWatch = 2;
-        this.captainsHour = 18;
-        this.noRotation = false;
-        this.crewOnWatch = "";
-
         // if param passed ==> use it to populate the object
-        if (srcObject) {
-            this.crewList = srcObject.crewList;
-            this.startDate = new Date(srcObject.startDate);
-            this.hoursInWatch = srcObject.hoursInWatch;
-            this.captainsHour = srcObject.captainsHour;
-            this.watchList = srcObject.watchList;
-            this.noRotation = srcObject.noRotation;
-            this.crewOnWatch = srcObject.crewOnWatch;
-        }
-
+        if (srcObject) this.loadFromObject(srcObject);
+    }
+    
+    loadFromObject(o:any) 
+    {
+            this.crewList = o.crewList;
+            this.startDate = new Date(o.startDate);
+            this.hoursInWatch = o.hoursInWatch;
+            this.captainsHour = o.captainsHour;
+            this.watchList = o.watchList;
+            this.noRotation = o.noRotation;
+            this.crewOnWatch = o.crewOnWatch'
     }
 
         // Given a start date, a length of a watch, create a time schedule
