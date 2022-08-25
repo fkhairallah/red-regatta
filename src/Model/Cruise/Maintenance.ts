@@ -1,45 +1,37 @@
 
 export class Equipment {
-    UID: string;
-    name: string;
-    description: string;
-    notes: string;
-    dateInstalled: Date;
-    trackHours: boolean;
-    hours: number;
-    hoursLastUpdated: Date;
-    serialNumber: string;
-    modules: Module[];
+    UID: string ="";
+    name: string ="";
+    description: string ="";
+    notes: string ="";
+    dateInstalled: Date = new Date();
+    trackHours: boolean = true;;
+    hours: number = 0;
+    hoursLastUpdated: Date = new Date();
+    serialNumber: string = "";
+    modules: Module[] = [];
     documents?: string;
 
-    constructor(o: any) {
+    constructor(o?: any) {
         if (o) {
-            this.UID = o.UID;
-            this.name = o.name;
-            this.description = o.description;
-            this.notes = o.notes;
-            this.dateInstalled = new Date(o.dateInstalled);
-            this.trackHours = o.trackHours;
-            this.hours = o.hours;
-            this.hoursLastUpdated = o.hoursLastUpdated;
-            this.serialNumber = o.serialNumber;
-            this.modules = [];
-            o.modules.forEach((m: any) => this.modules.push(new Module(m)));
-            this.documents = o.documents;
+            this.loadFromObject(o);
         }
-        else {
-            this.UID = "";
-            this.name = "";
-            this.description = "";
-            this.notes = "";
-            this.dateInstalled = new Date();
-            this.trackHours = false;
-            this.hours = 0;
-            this.hoursLastUpdated = new Date();
-            this.serialNumber = "";
-            this.modules = [];
-            this.documents = "";
-        }
+    }
+
+    loadFromObject(o:any){
+        this.UID = o.UID;
+        this.name = o.name;
+        this.description = o.description;
+        this.notes = o.notes;
+        this.dateInstalled = new Date(o.dateInstalled);
+        this.trackHours = o.trackHours;
+        this.hours = o.hours;
+        this.hoursLastUpdated = o.hoursLastUpdated;
+        this.serialNumber = o.serialNumber;
+        this.modules = [];
+        o.modules.forEach((m: any) => this.modules.push(new Module(m)));
+        this.documents = o.documents;
+
     }
 }
 
