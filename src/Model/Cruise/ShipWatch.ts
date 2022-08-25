@@ -37,7 +37,7 @@ export class ShipWatch {
             this.captainsHour = o.captainsHour;
             this.watchList = o.watchList;
             this.noRotation = o.noRotation;
-            this.crewOnWatch = o.crewOnWatch'
+            this.crewOnWatch = o.crewOnWatch;
     }
 
         // Given a start date, a length of a watch, create a time schedule
