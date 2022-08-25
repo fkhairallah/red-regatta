@@ -22,7 +22,8 @@ export declare class Module {
     hourInterval: number;
     lastServiceDate: Date;
     lastServiceHours: number;
-    constructor(o: any);
+    constructor(o?: any);
+    loadFromObject(o: any): void;
 }
 export declare class Service {
     UID: string;
@@ -34,5 +35,6 @@ export declare class Service {
     notes: string;
     date: Date;
     hours: number;
-    constructor(o: any);
+    constructor(o?: any);
+    loadFromObject(o: any): void;
 }

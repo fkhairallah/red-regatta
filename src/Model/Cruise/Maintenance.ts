@@ -36,52 +36,50 @@ export class Equipment {
 }
 
 export class Module {
-    UID: string;
-    name: string;
-    description: string;
-    repeatable: boolean;
-    timeInterval: number;
-    hourInterval: number;
-    lastServiceDate: Date;
-    lastServiceHours: number;
+    UID: string = "";
+    name: string ="";
+    description: string = "";
+    repeatable: boolean = true;
+    timeInterval: number = 0;
+    hourInterval: number = 0;
+    lastServiceDate: Date = new Date();;
+    lastServiceHours: number =0;
 
-    constructor(o: any) {
-        if (o) {
-            this.UID = o.UID;
-            this.name = o.name;
-            this.description = o.description;
-            this.repeatable = o.repeatable;
-            this.timeInterval = o.timeInterval;
-            this.hourInterval = o.hourInterval;
-            this.lastServiceDate = new Date(o.lastServiceDate);
-            this.lastServiceHours = o.lastServiceHours;
-        }
-        else {
-            this.UID = "";
-            this.name = "";
-            this.description = "";
-            this.repeatable = false;
-            this.timeInterval = 0;
-            this.hourInterval = 0;
-            this.lastServiceDate = new Date();
-            this.lastServiceHours = 0;
-        }
+    constructor(o?: any) {
+        if (o) this.loadFromObject(o);
+    }
+
+    loadFromObject(o:any)
+    {
+        this.UID = o.UID;
+        this.name = o.name;
+        this.description = o.description;
+        this.repeatable = o.repeatable;
+        this.timeInterval = o.timeInterval;
+        this.hourInterval = o.hourInterval;
+        this.lastServiceDate = new Date(o.lastServiceDate);
+        this.lastServiceHours = o.lastServiceHours;
+
     }
 }
 
 export class Service {
-    UID: string;
-    equipmentUID: string;
-    equipmentName: string;
-    moduleUID: string;
-    moduleName: string;
-    description: string;
-    notes: string;
-    date: Date;
-    hours: number;
+    UID: string = "";
+    equipmentUID: string = "";
+    equipmentName: string = "";
+    moduleUID: string = "";
+    moduleName: string = "";
+    description: string = "";
+    notes: string = "";
+    date: Date = new Date();
+    hours: number = 0;
 
-    constructor(o: any) {
-        if (o) {
+    constructor(o?: any) {
+        if (o) this.loadFromObject(o);
+    }
+
+    loadFromObject(o:any)
+    {
             this.UID = o.UID;
             this.equipmentUID = o.equipmentUID;
             this.equipmentName = o.equipmentName;
@@ -91,17 +89,5 @@ export class Service {
             this.notes = o.notes;
             this.date = new Date(o.date);
             this.hours = o.hours;
-        }
-        else {
-            this.UID = "";
-            this.equipmentUID = "";
-            this.equipmentName = "";
-            this.moduleUID = "";
-            this.moduleName = "";
-            this.description = "";
-            this.notes = "";
-            this.date = new Date();
-            this.hours = 0;
-        }
     }
 }
