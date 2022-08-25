@@ -28,25 +28,24 @@ export class ShipWatch {
         // if param passed ==> use it to populate the object
         if (srcObject) this.loadFromObject(srcObject);
     }
-    
-    loadFromObject(o:any) 
-    {
-            this.crewList = o.crewList;
-            this.startDate = new Date(o.startDate);
-            this.hoursInWatch = o.hoursInWatch;
-            this.captainsHour = o.captainsHour;
-            this.watchList = o.watchList;
-            this.noRotation = o.noRotation;
-            this.crewOnWatch = o.crewOnWatch;
+
+    loadFromObject(o: any) {
+        o.crewList.forEach((element: string) => { this.crewList.push(element) });
+        this.startDate = new Date(o.startDate);
+        this.hoursInWatch = o.hoursInWatch;
+        this.captainsHour = o.captainsHour;
+        o.watchList.forEach((element: WatchBlock) => { this.watchList.push(element) });
+        this.noRotation = o.noRotation;
+        this.crewOnWatch = o.crewOnWatch;
     }
 
-        // Given a start date, a length of a watch, create a time schedule
+    // Given a start date, a length of a watch, create a time schedule
     public setupWatch() {
         let wStart: number = 0;
         this.watchList = [];
         let numberOfCrewWatches: number = 0;
         do {
-            let newWatch: WatchBlock = { start: wStart, end: wStart + this.hoursInWatch, reserved: false, crew:"" };
+            let newWatch: WatchBlock = { start: wStart, end: wStart + this.hoursInWatch, reserved: false, crew: "" };
 
             // implement captain's hour by reserving a slot and not counting it towards crew rotation
             if (wStart == this.captainsHour)
@@ -71,7 +70,7 @@ export class ShipWatch {
 
     // return list dates for a specified cruise duration
     public getDates(cruiseDuration: number): string[] {
-        let newDate:Date = new Date(this.startDate);
+        let newDate: Date = new Date(this.startDate);
         let dates: string[] = [];
         for (let i = 0; i < cruiseDuration; i++) {
             let dateString: string = format(newDate, "eee do");
@@ -114,8 +113,7 @@ export class ShipWatch {
         return watchCrew;
     }
 
-    public getWatchNumber(date:Date):number
-    {
+    public getWatchNumber(date: Date): number {
         let hour = date.getHours();
         this.watchList.forEach((watch, index) => {
             if (watch.start <= hour && watch.end > hour) return index;
@@ -125,16 +123,16 @@ export class ShipWatch {
 
     // get watch list for the next 24 hours (including most recent watch)
     public getNext24Hours(): WatchBlock[] {
-        let watchCrew: WatchBlock[] = this.getDateSchedule(new Date(),2);   // get next 2 days schedule
-        
+        let watchCrew: WatchBlock[] = this.getDateSchedule(new Date(), 2);   // get next 2 days schedule
+
         let hrs: number = new Date().getHours();
-        let firstWatchIndex = watchCrew.findIndex((item: WatchBlock) => { return ( (hrs >= item.start) && (hrs < item.end)) });
+        let firstWatchIndex = watchCrew.findIndex((item: WatchBlock) => { return ((hrs >= item.start) && (hrs < item.end)) });
         this.crewOnWatch = watchCrew[firstWatchIndex].crew;
         if (firstWatchIndex != 0) firstWatchIndex--;
         let numberOfCrewWatches = (24 / this.hoursInWatch);
         watchCrew = watchCrew.slice(firstWatchIndex);
         if (watchCrew.length > numberOfCrewWatches) {
-            watchCrew = watchCrew.slice(0, numberOfCrewWatches + 1 );
+            watchCrew = watchCrew.slice(0, numberOfCrewWatches + 1);
         }
 
         return watchCrew;
@@ -148,7 +146,7 @@ export class ShipWatch {
         let watchIndex: number = (numberOfDays * numberOfCrewWatches) % this.crewList.length;
         for (let j = 0; j < lengthInDays; j++) {
             for (let i = 0; i < this.watchList.length; i++) {
-                let wb:WatchBlock = this.watchList[i];
+                let wb: WatchBlock = this.watchList[i];
                 if (wb.reserved) {
                     wb.crew = "CAPTAIN";
                 }
