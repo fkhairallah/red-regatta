@@ -10,7 +10,8 @@ export declare class Equipment {
     serialNumber: string;
     modules: Module[];
     documents?: string;
-    constructor(o: any);
+    constructor(o?: any);
+    loadFromObject(o: any): void;
 }
 export declare class Module {
     UID: string;
