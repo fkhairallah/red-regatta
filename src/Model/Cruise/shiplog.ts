@@ -21,7 +21,7 @@ export class StandingOrders   {
     }
 
     loadFromObject(o:any){
-        this.timestamp = o.timeStamp;
+        this.timestamp = new Date(o.timeStamp);
         this.type = o.type;
         this.author = o.author;
         this.message = o.message;
