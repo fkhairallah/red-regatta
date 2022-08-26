@@ -25,6 +25,11 @@ export declare class Module {
     constructor(o?: any);
     loadFromObject(o: any): void;
 }
+export declare type ServiceSummary = {
+    upcomingServices: number;
+    overdueServices: number;
+    hoursNeedsUpdating: number;
+};
 export declare class Service {
     UID: string;
     equipmentUID: string;
