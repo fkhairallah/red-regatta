@@ -25,7 +25,7 @@ export class StandingOrders   {
         this.type = o.type;
         this.author = o.author;
         this.message = o.message;
-        this.location.loadFromObject(o.location);
-        this.additional = o.additional;
+        if (o.location) this.location.loadFromObject(o.location);
+        if (o.additional) this.additional = o.additional;
     }
 }
