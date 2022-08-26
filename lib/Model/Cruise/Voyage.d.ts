@@ -15,6 +15,7 @@ export declare class Voyage {
     dayStats: PeriodStats;
     dayDistance: RunningAverage;
     segmentStats: PeriodStats[];
+    get timeAtSea(): number;
     constructor(o?: any);
     loadFromObject(o: any): void;
 }

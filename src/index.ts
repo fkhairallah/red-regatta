@@ -8,7 +8,7 @@ export { RaceCourse } from'./Model/Course/RaceCourse';
 export { RaceStatus } from'./Model/Course/RaceStatus';
 
 // Cruise
-export { Cruise } from './Model/Cruise/Cruise';
+//export { Cruise } from './Model/Cruise/Cruise';
 export { Owner } from './Model/Cruise/Owner';
 
 // Data

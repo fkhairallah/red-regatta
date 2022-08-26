@@ -5,7 +5,6 @@ export { Layline } from './Model/Course/Layline';
 export { Laylines } from './Model/Course/Laylines';
 export { RaceCourse } from './Model/Course/RaceCourse';
 export { RaceStatus } from './Model/Course/RaceStatus';
-export { Cruise } from './Model/Cruise/Cruise';
 export { Owner } from './Model/Cruise/Owner';
 export { AIS } from './Model/Data/AIS';
 export { AISTarget } from './Model/Data/AISTarget';

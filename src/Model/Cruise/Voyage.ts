@@ -20,6 +20,10 @@ export class Voyage {
     dayDistance: RunningAverage= new RunningAverage(1,0);
     segmentStats: PeriodStats[] = [];
 
+    get timeAtSea():number  {
+     return 3;   
+    }
+
     constructor(o?: any) {
         if (o) {
             this.loadFromObject(o);
