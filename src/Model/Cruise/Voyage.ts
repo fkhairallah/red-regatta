@@ -1,3 +1,4 @@
+import { differenceInDays } from 'date-fns';
 import { GPSPoint } from '../Data/GPSPoint';
 import { RunningAverage } from '../Utilities/RunningAverage';
 import { PeriodStats } from './PeriodStats';
@@ -20,8 +21,9 @@ export class Voyage {
     dayDistance: RunningAverage= new RunningAverage(1,0);
     segmentStats: PeriodStats[] = [];
 
+    // calculate elapsed days since the start of the cruise.
     get timeAtSea():number  {
-     return 3;   
+     return differenceInDays(new Date(), this.startTime)   
     }
 
     constructor(o?: any) {
