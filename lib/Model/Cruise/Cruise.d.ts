@@ -13,5 +13,6 @@ export declare class Cruise {
     distance: number;
     averageBPS: number;
     timeAtSea: number;
-    constructor();
+    constructor(o?: any);
+    loadFromObject(o: any): void;
 }
