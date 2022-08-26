@@ -52,6 +52,6 @@ export { VectorMath } from'./Model/Utilities/VectorMath';
 
 export {Equipment, Module, Service} from './Model/Cruise/Maintenance';
 export {PeriodStats} from './Model/Cruise/PeriodStats';
-export {LogEntry} from './Model/Cruise/shiplog';
+export {LogEntry, StandingOrders} from './Model/Cruise/shiplog';
 export {WatchBlock, ShipWatch} from './Model/Cruise/ShipWatch';
 export { Voyage } from './Model/Cruise/Voyage';
