@@ -50,7 +50,7 @@ export { RunningAverage } from'./Model/Utilities/RunningAverage';
 export { RunningWindAverage } from'./Model/Utilities/RunningWindAverage';
 export { VectorMath } from'./Model/Utilities/VectorMath';
 
-export {Equipment, Module, Service, ServiceSummary} from './Model/Cruise/Maintenance';
+export {Equipment, Module, Service} from './Model/Cruise/Maintenance';
 export {PeriodStats} from './Model/Cruise/PeriodStats';
 export {LogEntry, StandingOrders} from './Model/Cruise/shiplog';
 export {WatchBlock, ShipWatch} from './Model/Cruise/ShipWatch';

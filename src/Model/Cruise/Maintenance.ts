@@ -63,12 +63,6 @@ export class Module {
     }
 }
 
-export type ServiceSummary = {
-    upcomingServices: number;
-    overdueServices: number;
-    hoursNeedsUpdating: number;
-}
-
 export class Service {
     UID: string = "";
     equipmentUID: string = "";
