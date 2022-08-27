@@ -26,10 +26,6 @@ export declare class RunningWindAverage extends RunningAverage {
      *
      * ******************************************************************************/
     constructor(smoothingInterval?: number, pointsToTrack?: number, o?: any);
-    get maxValue(): number;
-    get minValue(): number;
-    get smoothedValue(): number;
-    get historicalAverageValue(): number;
     updateDataPoint(newData: number): number;
     changeOffset(newOffset: number): void;
 }

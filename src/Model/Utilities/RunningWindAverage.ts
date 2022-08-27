@@ -34,23 +34,7 @@ export class RunningWindAverage extends RunningAverage
 		super(smoothingInterval, pointsToTrack, o);
 	}
 	
-	/*override*/ public get maxValue():number
-	{
-		return Angles.substractAngles(this._maxValue,this.offSet);
-	}
-	/*override*/ public get minValue():number
-	{ 
-		return Angles.substractAngles(this._minValue,this.offSet); 
-	}
-	/*override*/ public get smoothedValue():number
-	{
-		return Angles.substractAngles(this._smoothedValue,this.offSet);
-	}
-	/*override*/ public get historicalAverageValue():number
-	{
-		return Angles.substractAngles(this._historicalAverageValue,this.offSet);
-	}
-
+	
 	
 	/*override*/ public updateDataPoint(newData:number):number
 	{
