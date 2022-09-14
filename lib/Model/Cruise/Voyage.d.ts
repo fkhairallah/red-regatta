@@ -1,4 +1,5 @@
 import { GPSPoint } from '../Data/GPSPoint';
+import { SailPoint } from '../Data/SailPoint';
 import { RunningAverage } from '../Utilities/RunningAverage';
 import { PeriodStats } from './PeriodStats';
 export declare class Voyage {
@@ -8,7 +9,7 @@ export declare class Voyage {
     destination: GPSPoint;
     estimatedDTD: number;
     estimatedTTD: number;
-    currentLocation: GPSPoint;
+    currentLocation: SailPoint;
     distanceToDestination: number;
     timeToDestination: number;
     voyageStats: PeriodStats;

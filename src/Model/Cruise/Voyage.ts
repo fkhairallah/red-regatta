@@ -1,5 +1,6 @@
 import { differenceInDays } from 'date-fns';
 import { GPSPoint } from '../Data/GPSPoint';
+import { SailPoint } from '../Data/SailPoint';
 import { RunningAverage } from '../Utilities/RunningAverage';
 import { PeriodStats } from './PeriodStats';
 
@@ -13,7 +14,7 @@ export class Voyage {
     estimatedDTD: number = 0;
     estimatedTTD: number = 0;
 
-    currentLocation: GPSPoint = new GPSPoint();
+    currentLocation: SailPoint = new SailPoint();
     distanceToDestination: number = 0;
     timeToDestination: number = 0;
     voyageStats: PeriodStats = new PeriodStats();
@@ -47,7 +48,7 @@ export class Voyage {
             this.destination = new GPSPoint(o.destination);
             this.estimatedDTD = o.estimatedDTD;
             this.estimatedTTD = o.estimatedTTD;
-            this.currentLocation = new GPSPoint(o.currentLocation);
+            this.currentLocation = new SailPoint(o.currentLocation);
             this.distanceToDestination = o.distanceToDestination;
             this.timeToDestination = o.timeToDestination;
             this.voyageStats = new PeriodStats(o.voyageStats);
