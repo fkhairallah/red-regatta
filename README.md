@@ -4,6 +4,11 @@ Repurposing AS3 [Red]Regatta into a typescript library
 
 ## Revision History
 
+### V1.4
+
+    - moved CruiseConfig classes
+    - minor fix for NMEA.useGPSTime logic
+
 ### V1.3
 
 - Added Cruise-Contol Classes. 

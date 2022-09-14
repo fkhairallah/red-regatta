@@ -43,7 +43,7 @@ import { EventEmitter } from "events";
 		this.currentData = new SailPoint();
 		
 		this.frequency = frequencyOfSamplingInSeconds * 1000;	// frequency of sample in milliseconds
-		this.lastRun = new Date(0,0,0,0,0,0,0);
+		this.lastRun = new Date(0);
 		
 		this.sentenceCounter = 0;
 		
@@ -198,12 +198,15 @@ import { EventEmitter } from "events";
 		// time that we use is either local time which is always present, or GPS time which depends the on $RMC sentence
 		// when parsing a log file, we MUST use GPS otherwise we cannot advance the time.
 		if (this.useGPSClock)
-			t = this.currentData.timeStamp;
+			t = new Date(this.currentData.timeStamp);
 		else
 			t = new Date;
 		
-		if (t == null) return;				// wait to get a valid time
-		if (this.lastRun == null) this.lastRun = t;	// if lastRun isn't set, set it to now
+        // check some error conditions
+        if (this.lastRun.getTime() == 0)
+            this.lastRun.setTime(t.getTime()); // if lastRun isn't set, set it to now
+        if (t.getTime() < this.lastRun.getTime()) 
+            this.lastRun.setTime(t.getTime())
 
 		// if we've exceed the period ==> create an SailPointEvent
 		if ((t.getTime() - this.lastRun.getTime()) > this.frequency)
