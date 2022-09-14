@@ -22,7 +22,7 @@ import { EventEmitter } from "events";
 
 	private frequency: number;				// frequency of sampling (defaults to 1hz)
 	private lastRun: Date;				// last time a sailpoint event was issued
-	public useGPSClock: boolean = true;			// if set, GPS time is used to issue sailpoint events
+	public useGPSClock: boolean = false;			// if set, GPS time is used to issue sailpoint events
 	// this is used when parsing a static file, but will
 	// cause problems if the NMEA stream does not contains
 	// $xxRMC sentences
@@ -34,9 +34,11 @@ import { EventEmitter } from "events";
 	private trueWindSet: boolean = false;
 
 
-	constructor(frequencyOfSamplingInSeconds: number = 1) {
+	constructor(frequencyOfSamplingInSeconds: number = 1, useGPSClock:boolean = false) {
 		super();	// initialize the emitter class
 		this.ais = new AIS();
+
+		this.useGPSClock = useGPSClock;
 
 		//this.dateStamp = new Date;
 

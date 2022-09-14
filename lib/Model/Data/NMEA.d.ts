@@ -15,7 +15,7 @@ export declare class NMEA extends EventEmitter {
     private badSentenceList;
     private badSentenceCount;
     private trueWindSet;
-    constructor(frequencyOfSamplingInSeconds?: number);
+    constructor(frequencyOfSamplingInSeconds?: number, useGPSClock?: boolean);
     loadFromObject(o: any): void;
     newSailPoint(sp: SailPoint): void;
     status(): void;
