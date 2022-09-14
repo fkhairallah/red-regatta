@@ -1,104 +1,104 @@
 
-import {Angles} from"../Utilities/Angles";
-import {Numeric} from"../Utilities/Numeric";
-import {GPSPoint} from"../Data/GPSPoint";
-import {SailPoint} from"../Data/SailPoint";
-import {AIS} from"../Data/AIS";
+import { Angles } from "../Utilities/Angles";
+import { Numeric } from "../Utilities/Numeric";
+import { GPSPoint } from "../Data/GPSPoint";
+import { SailPoint } from "../Data/SailPoint";
+import { AIS } from "../Data/AIS";
 import { EventEmitter } from "events";
 
-	
-/*[Bindable]*/export class NMEA extends EventEmitter
-{
+
+/*[Bindable]*/export class NMEA extends EventEmitter {
 	public static readonly NMEA_EVENT_GPS_DATA = "NMEA_EVENT_GPS_DATA";
 	public static readonly NMEA_EVENT_NEW_POINT = "NMEA_EVENT_NEW_POiNT";
-	
-	public currentData:SailPoint;
-	
-	
-	public ais:AIS;
-	
-	public magneticDeclination:number=0;	// stores magnetic variation at race location
+
+	public currentData: SailPoint;
+
+
+	public ais: AIS;
+
+	public magneticDeclination: number = 0;	// stores magnetic variation at race location
 
 	//public var headingCorrection:int = 0;	// CORRECT FOR BAD CROCODILE INSTRUMENTS
-	
-	private frequency:number;				// frequency of sampling (defaults to 1hz)
-	private lastRun:Date;				// last time a sailpoint event was issued
-	public useGPSClock:boolean=true;			// if set, GPS time is used to issue sailpoint events
-											// this is used when parsing a static file, but will
-											// cause problems if the NMEA stream does not contains
-											// $xxRMC sentences
 
-	private sentenceCounter:number;		// counts sentences
-	private badSentenceList:Array<string>;	// list of sentence we cannot parse
-	private badSentenceCount:number;			// number of malformed sentences
-	//private dateStamp:Date;				// date of stream
-	
-	constructor(frequencyOfSamplingInSeconds:number=1)
-	{
+	private frequency: number;				// frequency of sampling (defaults to 1hz)
+	private lastRun: Date;				// last time a sailpoint event was issued
+	public useGPSClock: boolean = true;			// if set, GPS time is used to issue sailpoint events
+	// this is used when parsing a static file, but will
+	// cause problems if the NMEA stream does not contains
+	// $xxRMC sentences
+
+	private sentenceCounter: number;		// counts sentences
+	private badSentenceList: Array<string>;	// list of sentence we cannot parse
+	private badSentenceCount: number;			// number of malformed sentences
+
+	private trueWindSet: boolean = false;
+
+
+	constructor(frequencyOfSamplingInSeconds: number = 1) {
 		super();	// initialize the emitter class
 		this.ais = new AIS();
-		
+
 		//this.dateStamp = new Date;
-		
+
 		this.currentData = new SailPoint();
-		
+
 		this.frequency = frequencyOfSamplingInSeconds * 1000;	// frequency of sample in milliseconds
 		this.lastRun = new Date(0);
-		
+
 		this.sentenceCounter = 0;
-		
+
 		this.badSentenceCount = 0;
 		this.badSentenceList = new Array();
+
+		// if we are not use GPS clock then emit a NMEA event at desired frequency
+		if (!this.useGPSClock) {
+			setInterval(this.emitNMEAEvent.bind(this), this.frequency)
+		}
 	}
-	
-	public loadFromObject(o:any):void
-	{
-		
+
+	public loadFromObject(o: any): void {
+
 		this.magneticDeclination = o.magneticDeclination;
-		
+
 		// we're going to persist the AIS object
-		if (o.ais != null)
-		{
+		if (o.ais != null) {
 			this.ais.loadFromObject(o.ais);
 		}
 	}
-	
-	public newSailPoint(sp:SailPoint):void
-	{
+
+	public newSailPoint(sp: SailPoint): void {
 		this.currentData = sp;
 		this.emit(NMEA.NMEA_EVENT_GPS_DATA, sp);
 		//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.NEW_SAILPOINT, sp));
 	}
-	
-	public status():void
-	{
+
+	public status(): void {
 		console.log(this.badSentenceCount + " bad Sentences. Following Sentences Unparsed:");
 		console.log(this.badSentenceList);
-		console.log("Total Sentences read = " , this.sentenceCounter);
+		console.log("Total Sentences read = ", this.sentenceCounter);
 	}
-	
-	
-	
+
+
+
 	/******************************************************************************
 	 * This section contains routine that will take a SailPoint and emitt the 
 	 * required NMEA sentences. e.g. reverse parsing. It generates the minimum
 	 * required sentences
 	 * ***************************************************************************/
-	
-	public generateNMEAStream(sp?:SailPoint):any[]
-	{
-		var ns:any[] = new Array;
-		
+
+	public generateNMEAStream(sp?: SailPoint): any[] {
+		var ns: any[] = new Array;
+
 		if (sp == null) sp = this.currentData;
-		
+
 		ns.push(this.genHDG(sp));		// heading
 		ns.push(this.genVHW(sp));		// speed & course over water
-		ns.push(this.genMWV(sp,false));	// apparent wind
+		ns.push(this.genMWV(sp, false));	// apparent wind
 		//ns.push(genMWV(sp,true));	// true wind
 		//ns.push(genMWD(sp));		// true wind direction
 		//ns.push(genVWR(sp));		// true wind direction
 		ns.push(this.genRMC(sp));		// GPS 
-		
+
 		return ns;
 	}
 
@@ -106,41 +106,36 @@ import { EventEmitter } from "events";
 	 * This section parses a NMEA stream (live or} froma log file) and produces
 	 * an updated SailPoint.
 	 * ***************************************************************************/
-	
+
 	// parse a NMEA sentence and fill the class with data
 	// a new sailPoint is created at the set frequency (1s or more) 
-	public parse(sentence:string):void
-	{
+	public parse(sentence: string): void {
 		this.sentenceCounter++;		// count the sentences
-		
+
 		// valid if it ends with correct *checksum
-		let n = sentence.indexOf("*")+1;
-		if (sentence.substring(n,n+2) != NMEA.calculateCheckSum(sentence) )
-		{
+		let n = sentence.indexOf("*") + 1;
+		if (sentence.substring(n, n + 2) != NMEA.calculateCheckSum(sentence)) {
 			this.badSentenceCount++;
 			return;
 		}
 
 		// check for AIS sentences
-		if (sentence.charAt(0) == "!")
-		{
+		if (sentence.charAt(0) == "!") {
 			this.ais.parseSentence(sentence);
 			return;
 		}
-		
+
 		// valid NMEA starts with $
-		if (sentence.charAt(0) != '$')  
-		{
+		if (sentence.charAt(0) != '$') {
 			this.badSentenceCount++;
-			return; 
-		} 
+			return;
+		}
 
 		// split into tokens along comma lines	
-		var tokens:any[] = sentence.substring(0,sentence.indexOf("*")).split(",");
+		var tokens: any[] = sentence.substring(0, sentence.indexOf("*")).split(",");
 
 		// parse known sentences
-		switch ( tokens[0].substring(3) ) 
-		{
+		switch (tokens[0].substring(3)) {
 			case "HDG": // heading
 				this.parseHDG(tokens);
 				break;
@@ -153,7 +148,7 @@ import { EventEmitter } from "events";
 			case "RMC": // Geo Position
 				this.parseRMC(tokens);
 				break;
-			
+
 			case "DBT":	// Depth Below transducer
 				this.parseDBT(tokens);
 				break;
@@ -169,7 +164,7 @@ import { EventEmitter } from "events";
 			case "MTW":	// Water Temperature
 				this.parseMTW(tokens);
 				break;
-			
+
 			// a  waypoint named "MOB" will trigger an alarm
 			case "BWC":	// Bearing & Distance to Waypoint (Great Circle)
 			case "BWR":	// Bearing & Distance to Waypoint (rhumb line)
@@ -181,46 +176,38 @@ import { EventEmitter } from "events";
 				//console.log(sentence);
 				break;
 		}
-		
+
 		// now signal to the world at the appropriate frequency
-		this.signalIfSamplePeriodExpired();
-		
+		if (this.useGPSClock) this.signalIfSamplePeriodExpired();
+
 	}
-	
+
 	// this routine will implement the sampling of NMEA data and creates
 	// a collection of SailPoint at the set frequency.
-	// it now uses local time to implement instead of NMEA time which is unreliable
-	private trueWindSet:boolean=false;
-	private signalIfSamplePeriodExpired():void
-	{
-		var t:Date;
-		
-		// time that we use is either local time which is always present, or GPS time which depends the on $RMC sentence
-		// when parsing a log file, we MUST use GPS otherwise we cannot advance the time.
-		if (this.useGPSClock)
-			t = new Date(this.currentData.timeStamp);
-		else
-			t = new Date;
-		
-        // check some error conditions: switching to an earlier time?
-        if (t.getTime() < this.lastRun.getTime()) 
-            this.lastRun.setTime(t.getTime())
+	// time that we use is either local time which is always present, or GPS time which depends the on $RMC sentence
+	// when parsing a log file, we MUST use GPS otherwise we cannot advance the time.
+	private signalIfSamplePeriodExpired(): void {
+		let t:Date = new Date(this.currentData.timeStamp);
+
+		// check some error conditions: switching to an earlier time?
+		if (t.getTime() < this.lastRun.getTime())
+			this.lastRun.setTime(t.getTime())
 
 		// if we've exceed the period ==> create an SailPointEvent
-		if ((t.getTime() - this.lastRun.getTime()) > this.frequency)
-		{
-			if (!this.trueWindSet) // if we do not have true wind --> calculate (or should we calculate it anyway?)
-			{
-				this.currentData.calculateTrueWindFromApparent();
-			}
-			this.currentData.timeStamp = t;
+		if ((t.getTime() - this.lastRun.getTime()) > this.frequency) {
+			this.emitNMEAEvent();
 			this.lastRun = t;
-			this.emit(NMEA.NMEA_EVENT_GPS_DATA,this.currentData);
-			//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.NEW_SAILPOINT, this.currentData));
-			this.trueWindSet = false;
 		}
 	}
-	
+
+	private emitNMEAEvent() {
+		if (!this.trueWindSet) // if we do not have true wind --> calculate (or should we calculate it anyway?)
+		{
+			this.currentData.calculateTrueWindFromApparent();
+		}
+		this.emit(NMEA.NMEA_EVENT_GPS_DATA, this.currentData);
+		this.trueWindSet = false;
+	}
 
 	/*=== HDG - Heading - Deviation & Variation ===
 	
@@ -239,25 +226,22 @@ import { EventEmitter } from "events";
 	5. Magnetic Variation direction, E = Easterly, W = Westerly
 	6. Checksum
 	*/
-	private parseHDG(tokens:any[]):boolean
-	{
-		if (isNaN(this.magneticDeclination)) 
-		{
+	private parseHDG(tokens: any[]): boolean {
+		if (isNaN(this.magneticDeclination)) {
 			if (tokens[5] == "W") this.magneticDeclination = -parseFloat(tokens[4]);
 			else this.magneticDeclination = parseFloat(tokens[4]);
 		}
-		
-		var magneticHeading:number = parseFloat(tokens[1]); 
-		this.currentData.trueHeading =  Angles.addAngles(magneticHeading,this.magneticDeclination);
+
+		var magneticHeading: number = parseFloat(tokens[1]);
+		this.currentData.trueHeading = Angles.addAngles(magneticHeading, this.magneticDeclination);
 		return true;
 	}
-	protected genHDG(sp:SailPoint):string
-	{
-		var s:string = "$RRHDG,{sp.trueHeading.toFixed(1)},,,{Math.abs(this.magneticDeclination).toFixed(1)},{this.genEastWest(this.magneticDeclination)}*";
+	protected genHDG(sp: SailPoint): string {
+		var s: string = "$RRHDG,{sp.trueHeading.toFixed(1)},,,{Math.abs(this.magneticDeclination).toFixed(1)},{this.genEastWest(this.magneticDeclination)}*";
 		s += NMEA.calculateCheckSum(s);
 		return s;
 	}
-	
+
 	/* === RMC - Recommended Minimum Navigation Information ===
 	------------------------------------------------------------------------------
 	12
@@ -286,41 +270,37 @@ import { EventEmitter } from "events";
 	quality threshold, e.g. because the dilution of precision is too high 
 	or an elevation mask test failed.
 	*/
-	private parseRMC(tokens:any[]):boolean
-	{
-		try 
-		{
-			var x:number = NMEA.latlon2Decimal(tokens[3], tokens[4]);
+	private parseRMC(tokens: any[]): boolean {
+		try {
+			var x: number = NMEA.latlon2Decimal(tokens[3], tokens[4]);
 			if (isNaN(x)) return false;	// no fix - ignore sentence
-			
+
 			// valid lan --> we have a fix --> time stamp is valid. 
 			this.currentData.lat = x;
 			this.currentData.lon = NMEA.latlon2Decimal(tokens[5], tokens[6]);
-			
+
 			this.currentData.speedOverGround = parseFloat(tokens[7]);
 			this.currentData.courseOverGround = parseFloat(tokens[8]);
-			
-			this.currentData.timeStamp = NMEA.parseNMEATimeAndDate(tokens[1],tokens[9]);
-			
-			if (tokens[1] == "A" )	// tokens[1] validity: a-OK, v-warning) 
+
+			this.currentData.timeStamp = NMEA.parseNMEATimeAndDate(tokens[1], tokens[9]);
+
+			if (tokens[1] == "A")	// tokens[1] validity: a-OK, v-warning) 
 				return false;
 		}
-		catch (er)
-		{
-			console.log("error parsing RMC",er);
+		catch (er) {
+			console.log("error parsing RMC", er);
 			return false;
 		}
 		return true;
-		
+
 	}
-	protected genRMC(sp:SailPoint):string
-	{
-		var s:string = "$RRRMC,{this.genNMEATime(sp.timeStamp)},{A},{this.decimalToNMEAAngle(sp.lat)},{this.genNorthSouth(sp.lat)},{this.decimalToNMEAAngle(sp.lon)},{this.genEastWest(sp.lon)},{sp.speedOverGround.toFixed(1)},{Math.trunc(sp.courseOverGround)},{this.genNMEADate(sp.timeStamp)},{Math.abs(this.magneticDeclination).toFixed(1)},{this.genEastWest(this.magneticDeclination)},{A}*";
-				
+	protected genRMC(sp: SailPoint): string {
+		var s: string = "$RRRMC,{this.genNMEATime(sp.timeStamp)},{A},{this.decimalToNMEAAngle(sp.lat)},{this.genNorthSouth(sp.lat)},{this.decimalToNMEAAngle(sp.lon)},{this.genEastWest(sp.lon)},{sp.speedOverGround.toFixed(1)},{Math.trunc(sp.courseOverGround)},{this.genNMEADate(sp.timeStamp)},{Math.abs(this.magneticDeclination).toFixed(1)},{this.genEastWest(this.magneticDeclination)},{A}*";
+
 		s += NMEA.calculateCheckSum(s);
 		return s;
 	}
-	
+
 	/* === MWV - Wind Speed and Angle ===
 	
 	------------------------------------------------------------------------------
@@ -338,8 +318,7 @@ import { EventEmitter } from "events";
 	5. Status, A = Data Valid
 	6. Checksum
 	*/
-	private parseMWV(tokens:any[]):boolean
-	{
+	private parseMWV(tokens: any[]): boolean {
 		if (tokens[2] == "R") {
 			this.currentData.apparentWindAngle = parseFloat(tokens[1]);
 			this.currentData.apparentWindSpeed = parseFloat(tokens[3]);
@@ -354,20 +333,18 @@ import { EventEmitter } from "events";
 		}
 		return false;
 	}
-	protected genMWV(sp:SailPoint,isTrue:boolean):string
-	{
-		var wa:string;
-		var ws:string;
+	protected genMWV(sp: SailPoint, isTrue: boolean): string {
+		var wa: string;
+		var ws: string;
 		if (isTrue) {
 			wa = sp.trueWindAngle.toFixed(1);
 			ws = sp.trueWindSpeed.toFixed(1);
 		}
-		else
-		{
+		else {
 			wa = sp.apparentWindAngle.toFixed(1);
 			ws = sp.apparentWindSpeed.toFixed(1);
 		}
-		var s:string = '$RRMWV,{wa},{(isTrue?"T":"R")},{ws},{N},{A}*';
+		var s: string = '$RRMWV,{wa},{(isTrue?"T":"R")},{ws},{N},{A}*';
 		s += NMEA.calculateCheckSum(s);
 		return s;
 	}
@@ -383,9 +360,8 @@ import { EventEmitter } from "events";
 	6 Transverse Ground Speed 	Speed to Starboard, over ground “-” means port 		0.25 
 	7 Ground Data Status 		A = Valid, V = Void 								A 
 	*/
-	protected genVBW(sp:SailPoint):string
-	{
-		var s:string = "$RRVBW,{sp.speedOverWater.toFixed(1)},0,A,0,0,V*";
+	protected genVBW(sp: SailPoint): string {
+		var s: string = "$RRVBW,{sp.speedOverWater.toFixed(1)},0,A,0,0,V*";
 		s += NMEA.calculateCheckSum(s);
 		return s;
 	}
@@ -410,22 +386,20 @@ import { EventEmitter } from "events";
 	8. K = Kilometers
 	9. Checksum
 	*/
-	private parseVHW(tokens:any[]):boolean
-	{
-		var cow:number = parseFloat(tokens[1]);
-		var sow:number = parseFloat(tokens[5]);
-		
-		if (!isNaN(cow) ) this.currentData.trueHeading = cow; 
-		if (!isNaN(sow) ) this.currentData.speedOverWater = sow; 
+	private parseVHW(tokens: any[]): boolean {
+		var cow: number = parseFloat(tokens[1]);
+		var sow: number = parseFloat(tokens[5]);
+
+		if (!isNaN(cow)) this.currentData.trueHeading = cow;
+		if (!isNaN(sow)) this.currentData.speedOverWater = sow;
 		return true;
 	}
-	protected genVHW(sp:SailPoint):string
-	{
-		var s:string = "$RRVHW,{sp.trueHeading.toFixed(1)},T,{(sp.trueHeading - this.magneticDeclination).toFixed(1)},M,{sp.speedOverWater.toFixed(1)},N,{(sp.speedOverWater * 1.852).toFixed(1)},K*";
+	protected genVHW(sp: SailPoint): string {
+		var s: string = "$RRVHW,{sp.trueHeading.toFixed(1)},T,{(sp.trueHeading - this.magneticDeclination).toFixed(1)},M,{sp.speedOverWater.toFixed(1)},N,{(sp.speedOverWater * 1.852).toFixed(1)},K*";
 		s += NMEA.calculateCheckSum(s);
 		return s;
 	}
-	
+
 	/* NMEA 0183 standard Wind Direction and Speed, with respect to north.
 		
 	$WIMWD,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>*hh
@@ -439,13 +413,12 @@ import { EventEmitter } from "events";
 		<7> Wind speed, meters/second, to the nearest 0.1 m/s.
 		<8> M = Meters/second
 	*/
-	protected genMWD(sp:SailPoint):string
-	{
-		var s:string = "$RRMWD,{sp.trueWindDirection.toFixed(1)},T,{Angles.substractAngles(sp.trueWindSpeed, this.magneticDeclination).toFixed(1)},T,{sp.speedOverGround.toFixed(1)},N,{(sp.trueWindSpeed * 0.514444444).toFixed(1)},M*";
+	protected genMWD(sp: SailPoint): string {
+		var s: string = "$RRMWD,{sp.trueWindDirection.toFixed(1)},T,{Angles.substractAngles(sp.trueWindSpeed, this.magneticDeclination).toFixed(1)},T,{sp.speedOverGround.toFixed(1)},N,{(sp.trueWindSpeed * 0.514444444).toFixed(1)},M*";
 		s += NMEA.calculateCheckSum(s);
 		return s;
 	}
-	
+
 
 	/**************************************************************************************
 	* === DBT - Depth below transducer ===
@@ -466,12 +439,11 @@ import { EventEmitter } from "events";
 	6. F = Fathoms
 	7. Checksum
 	*******************************************************************************************/
-	private parseDBT(tokens:any[]):boolean
-	{
+	private parseDBT(tokens: any[]): boolean {
 		this.currentData.depth = parseFloat(tokens[1]);
 		return true;
 	}
-	
+
 	/**************************************************************************************
 	=== XTE - Cross-Track Error, Measured ===
 		
@@ -496,8 +468,7 @@ import { EventEmitter } from "events";
 		6. FAA mode indicator (NMEA 2.3 and later, optional)
 		7. Checksum
 		**************************************************************************************/
-	private parseXTE(tokens:any[]):boolean
-	{
+	private parseXTE(tokens: any[]): boolean {
 		this.currentData.XTE = parseFloat(tokens[3]);
 		if (tokens[3] == "L") this.currentData.XTE *= -1;
 		return true;
@@ -519,12 +490,11 @@ import { EventEmitter } from "events";
 		3. Checksum
 		
 		**************************************************************************************/
-	private parseMTW(tokens:any[]):boolean
-	{
+	private parseMTW(tokens: any[]): boolean {
 		this.currentData.waterTemperature = parseFloat(tokens[1]) * 1.8 + 32;
 		return true;
 	}
-	
+
 	/***************************************************************************************
 	 * BWR - Bearing and Distance to Waypoint - Rhumb Line
 																 11
@@ -548,34 +518,31 @@ import { EventEmitter } from "events";
 		13.	Checksum
 	*
 		* *************************************************************************************/
-	private parseBWRC(tokens:any[]):boolean
-	{
-		try 
-		{
-			var w:GPSPoint = new GPSPoint;
+	private parseBWRC(tokens: any[]): boolean {
+		try {
+			var w: GPSPoint = new GPSPoint;
 			// waypoint name
 			w.name = tokens[12];
-			
+
 			w.lat = NMEA.latlon2Decimal(tokens[2], tokens[3]);
 			w.lon = NMEA.latlon2Decimal(tokens[4], tokens[5]);
 
 			// valid lat --> we have a fix --> time stamp is valid. 
 			w.timeStamp = NMEA.parseNMEATimeAndDate(tokens[1]);
-			
+
 			this.currentData.waypoint = w;
-			
-			
+
+
 		}
-		catch (er)
-		{
-			console.log("error parsing BWR",er);
+		catch (er) {
+			console.log("error parsing BWR", er);
 			return false;
 		}
 		return true;
-		
+
 	}
-	
-	
+
+
 	/********************************************************************************************
 	 * 
 	 * this routine parses the RMC NMEA date string into a proper AS3 Date
@@ -584,46 +551,42 @@ import { EventEmitter } from "events";
 	 * 
 	 * ******************************************************************************************/
 
-	static parseNMEATimeAndDate(nmeaTime:string, nmeaDate?:string):any
-	{
-		var yy:number;
-		var mm:number;
-		var dd:number;
-		var t:Date = new Date ();
+	static parseNMEATimeAndDate(nmeaTime: string, nmeaDate?: string): any {
+		var yy: number;
+		var mm: number;
+		var dd: number;
+		var t: Date = new Date();
 
-		try 
-		{
+		try {
 			if (nmeaTime == "") return null;
-			
-			if (nmeaDate == null)
-			{
+
+			if (nmeaDate == null) {
 				yy = t.getUTCFullYear();
 				mm = t.getUTCMonth();
 				dd = t.getUTCDate();
 			}
-			else
-			{
+			else {
 				if (nmeaDate == "") return null;
 				// parse date
-				yy = parseInt(nmeaDate.substring(4,6)) + 2000;
-				mm = parseInt(nmeaDate.substring(2,4))-1;
-				dd = parseInt(nmeaDate.substring(0,2));					
+				yy = parseInt(nmeaDate.substring(4, 6)) + 2000;
+				mm = parseInt(nmeaDate.substring(2, 4)) - 1;
+				dd = parseInt(nmeaDate.substring(0, 2));
 			}
-			
+
 			// parse time
-			var hours:number = parseInt(nmeaTime.substring(0,2)); // hours
-			var minutes:number = parseInt(nmeaTime.substring(2,4)); // minutes
+			var hours: number = parseInt(nmeaTime.substring(0, 2)); // hours
+			var minutes: number = parseInt(nmeaTime.substring(2, 4)); // minutes
 			if (minutes > 60) return null;
-			
-			var seconds:number = parseInt(nmeaTime.substring(4,6));  // seconds
-			if ( seconds > 60) return null;
-			
-			var milliseconds:number = 0
+
+			var seconds: number = parseInt(nmeaTime.substring(4, 6));  // seconds
+			if (seconds > 60) return null;
+
+			var milliseconds: number = 0
 			if (nmeaTime.length == 9)
-				milliseconds = parseInt(nmeaTime.substring(8,10)) * 10;
+				milliseconds = parseInt(nmeaTime.substring(8, 10)) * 10;
 
 			//if (hours == 0 && minutes == 0 && seconds == 0 && milliseconds == 0) milliseconds = 1;
-			t.setUTCFullYear( yy);
+			t.setUTCFullYear(yy);
 			t.setUTCMonth(mm);
 			t.setUTCDate(dd);
 			t.setUTCHours(hours);
@@ -632,15 +595,14 @@ import { EventEmitter } from "events";
 			t.setUTCMilliseconds(milliseconds);
 			return t;
 		}
-		catch (er)
-		{
-			console.log("Error parseNMEATimeAndDate",er);
+		catch (er) {
+			console.log("Error parseNMEATimeAndDate", er);
 		}
 		return null;
-		
+
 	}
-	
-	
+
+
 	/* Where a numeric latitude or longitude is given, the two digits
 	immediately to the left of the decimal point are whole minutes, to the
 	right are decimals of minutes, and the remaining digits to the left of
@@ -649,77 +611,68 @@ import { EventEmitter } from "events";
 	Eg. 4533.3500 is 45 degrees and 33.35 minutes. ".35" of a minute is
 	exactly 21 seconds.
 	*/
-	protected decimalToNMEAAngle(val:number):string
-	{
-		var a:number = Math.abs(val);
-		var deg:number = Math.trunc(a);	// degrees
-		var min:number = (a - deg) * 60;
-		var fracMin:number = Math.trunc(  ( min - Math.trunc(min) ) * 10000);
-		var s:string = Numeric.zeroPad(deg, 2) + Numeric.zeroPad(Math.trunc(min),2) + "." + Numeric.zeroPad(fracMin,4);
+	protected decimalToNMEAAngle(val: number): string {
+		var a: number = Math.abs(val);
+		var deg: number = Math.trunc(a);	// degrees
+		var min: number = (a - deg) * 60;
+		var fracMin: number = Math.trunc((min - Math.trunc(min)) * 10000);
+		var s: string = Numeric.zeroPad(deg, 2) + Numeric.zeroPad(Math.trunc(min), 2) + "." + Numeric.zeroPad(fracMin, 4);
 		return s;
-		
+
 	}
-	
-	protected genNMEATime(t:Date):string
-	{
-		var h:string = Numeric.zeroPad( t.getUTCHours(), 2) + Numeric.zeroPad( t.getUTCMinutes(), 2) + Numeric.zeroPad(t.getUTCSeconds(),2);
+
+	protected genNMEATime(t: Date): string {
+		var h: string = Numeric.zeroPad(t.getUTCHours(), 2) + Numeric.zeroPad(t.getUTCMinutes(), 2) + Numeric.zeroPad(t.getUTCSeconds(), 2);
 		return h;
-		
+
 	}
-	protected genNMEADate(t:Date):string
-	{
-		var h:string = "";
-		var y:number = t.getFullYear();
-		if (y > 2000) h = Numeric.zeroPad( t.getUTCDate(), 2) + Numeric.zeroPad( t.getUTCMonth()+1, 2) + Numeric.zeroPad(t.getUTCFullYear()-2000,2);
+	protected genNMEADate(t: Date): string {
+		var h: string = "";
+		var y: number = t.getFullYear();
+		if (y > 2000) h = Numeric.zeroPad(t.getUTCDate(), 2) + Numeric.zeroPad(t.getUTCMonth() + 1, 2) + Numeric.zeroPad(t.getUTCFullYear() - 2000, 2);
 		return h;
 	}
-	
-	protected genNorthSouth(n:number):string
-	{
-		if (n>=0) return "N";
+
+	protected genNorthSouth(n: number): string {
+		if (n >= 0) return "N";
 		else return "S";
 	}
-	protected genEastWest(n:number):string
-	{
-		if (n>=0) return "E";
+	protected genEastWest(n: number): string {
+		if (n >= 0) return "E";
 		else return "W";
 	}
-	
-	
 
-	public static isValidChecksum(sentence:string):boolean
-	{
+
+
+	public static isValidChecksum(sentence: string): boolean {
 		// valid if it ends with correct *checksum
-		return(sentence.substr(sentence.indexOf("*")+1,2) == NMEA.calculateCheckSum(sentence) )
+		return (sentence.substr(sentence.indexOf("*") + 1, 2) == NMEA.calculateCheckSum(sentence))
 	}
-	
+
 	// utilities used by the class
-	public static calculateCheckSum(sentence:string):string
-	{
-		var i:number;
-		var cs:number = 0;
-		var s:string;
-		
-		for (i=1;i<sentence.length;i++) {
-			if (sentence.charCodeAt(i) == 42 ) {
+	public static calculateCheckSum(sentence: string): string {
+		var i: number;
+		var cs: number = 0;
+		var s: string;
+
+		for (i = 1; i < sentence.length; i++) {
+			if (sentence.charCodeAt(i) == 42) {
 				cs &= 0xFF;	// lower byte only
 				s = cs.toString(16).toUpperCase();
-				if (s.length < 2) s = "0" + s; 
+				if (s.length < 2) s = "0" + s;
 				return s;
 			} else
 				cs ^= sentence.charCodeAt(i);
 		}
 		return ""; // we shouldn't get here if we have a valid NMEA string
-		
+
 	}
-	public static latlon2Decimal(lat:string, NS:string):number 
-	{
-		var fracLoc:number = lat.indexOf(".");
-		
-		var med:number = parseFloat(lat.substring(fracLoc-2)) / 60.0;
-		med +=  parseFloat(lat.substring(0, fracLoc-2));
-		switch(	NS.charAt(0) )
-		{
+	public static latlon2Decimal(lat: string, NS: string): number {
+		var fracLoc: number = lat.indexOf(".");
+
+		var med: number = parseFloat(lat.substring(fracLoc - 2)) / 60.0;
+		med += parseFloat(lat.substring(0, fracLoc - 2));
+		switch (NS.charAt(0)) {
 			case "S":
 			case "W":
 				return -med;
@@ -733,7 +686,7 @@ import { EventEmitter } from "events";
 				break;
 		}
 	}
-	
-			
+
+
 }
 

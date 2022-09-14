@@ -14,6 +14,7 @@ export declare class NMEA extends EventEmitter {
     private sentenceCounter;
     private badSentenceList;
     private badSentenceCount;
+    private trueWindSet;
     constructor(frequencyOfSamplingInSeconds?: number);
     loadFromObject(o: any): void;
     newSailPoint(sp: SailPoint): void;
@@ -29,8 +30,8 @@ export declare class NMEA extends EventEmitter {
      * an updated SailPoint.
      * ***************************************************************************/
     parse(sentence: string): void;
-    private trueWindSet;
     private signalIfSamplePeriodExpired;
+    private emitNMEAEvent;
     private parseHDG;
     protected genHDG(sp: SailPoint): string;
     private parseRMC;
