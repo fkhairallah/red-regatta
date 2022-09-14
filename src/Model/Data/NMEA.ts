@@ -202,9 +202,7 @@ import { EventEmitter } from "events";
 		else
 			t = new Date;
 		
-        // check some error conditions
-        if (this.lastRun.getTime() == 0)
-            this.lastRun.setTime(t.getTime()); // if lastRun isn't set, set it to now
+        // check some error conditions: switching to an earlier time?
         if (t.getTime() < this.lastRun.getTime()) 
             this.lastRun.setTime(t.getTime())
 
