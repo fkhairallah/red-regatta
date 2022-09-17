@@ -5,17 +5,18 @@ import { RunningWindAverage } from "../Utilities/RunningWindAverage";
 export declare class PeriodStats {
     inProgress: boolean;
     name: string;
-    startTime?: Date;
-    endTime?: Date;
+    startTime: Date;
+    endTime: Date;
     startLocation: GPSPoint;
     endLocation: GPSPoint;
     distance: number;
     speedOverGround: RunningAverage;
     trueWindSpeed: RunningAverage;
     trueWindDirection: RunningWindAverage;
+    vmg: number;
     constructor(o?: any);
     loadFromObject(o: any): void;
     addPoint(point: SailPoint): void;
-    finalize(date: Date): void;
+    finalize(): void;
     getSummaryData(): any;
 }

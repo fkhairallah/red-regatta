@@ -30,13 +30,6 @@ export class Voyage {
     constructor(o?: any) {
         if (o) {
             this.loadFromObject(o);
-        } else {
-            this.destination.name = "Milford Harbor";
-            this.destination.lat = 41.230698;
-            this.destination.lon = -73.068894;
-            this.currentLocation.name = "Maverick";
-            this.currentLocation.lat = 41.230698;
-            this.currentLocation.lon = -73.068894;
         }
     }
 

@@ -5,7 +5,7 @@ export declare class RunningAverage {
     smoothedCount: number;
     historicalAverageValue: number;
     historicalCount: number;
-    dataHistory: [number];
+    dataHistory: number[];
     maxHistoryPoints: number;
     interval: number;
     /***********************************************************************
@@ -14,6 +14,7 @@ export declare class RunningAverage {
      ***********************************************************************/
     constructor(smoothingInterval?: number, pointsToTrack?: number, o?: any);
     loadFromObject(o: any): void;
+    finalize(): void;
     get minAxis(): number;
     get maxAxis(): number;
     updateDataPoint(newData: number): number;

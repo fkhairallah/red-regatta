@@ -3,17 +3,17 @@
 export class RunningAverage {
 
 	// Maximum, Minimum and average 
-	maxValue: number;
-	minValue: number;
+	maxValue: number = Number.MIN_VALUE;
+	minValue: number = Number.MAX_VALUE;
 
 	// smoothed value & count
-	smoothedValue: number;
-	smoothedCount: number;
+	smoothedValue: number = Number.NaN;
+	smoothedCount: number = 0;
 
 	// historical average & data History
 	historicalAverageValue: number = 0;
 	historicalCount: number = 0;
-	dataHistory: [number];
+	dataHistory: number[] = [];
 
 
 	// class parameters
@@ -25,36 +25,32 @@ export class RunningAverage {
 	 * pointsToTrack ==> size of buffer (-1 all are saved, 0 none are saved)
 	 ***********************************************************************/
 	constructor(smoothingInterval: number = 30, pointsToTrack: number = 0, o?: any) {
+
+		// load if necessary
+		if (o) this.loadFromObject(o);
+
 		// remember the settings
 		this.interval = smoothingInterval;
 		this.maxHistoryPoints = pointsToTrack;
 
-		// initialized smoothed value
-		this.smoothedValue = Number.NaN;
-		this.smoothedCount = 0;
-
-		// min & max set to end of range
-		this.minValue = Number.MAX_VALUE;
-		this.maxValue = Number.MIN_VALUE;
-
-		this.dataHistory = [0];
-		this.historicalCount = 0;
-
-		this.loadFromObject(o);
 	}
 
 	loadFromObject(o: any) {
-		if (o) {
-			this.maxValue = o.maxValue;
-			this.minValue = o.minValue;
-			this.smoothedValue = o.smoothedValue;
-			this.smoothedCount = o.smoothedCount;
-			this.historicalAverageValue = o.historicalAverageValue;
-			this.historicalCount = o.historicalCount;
-			this.dataHistory = o.dataHistory;
-			this.maxHistoryPoints = o.maxHistoryPoints;
-			this.interval = o.interval;
-		}
+		this.maxValue = o.maxValue;
+		this.minValue = o.minValue;
+		this.smoothedValue = o.smoothedValue;
+		this.smoothedCount = o.smoothedCount;
+		this.historicalAverageValue = o.historicalAverageValue;
+		this.historicalCount = o.historicalCount;
+		this.dataHistory = o.dataHistory;
+		this.maxHistoryPoints = o.maxHistoryPoints;
+		this.interval = o.interval;
+	}
+
+	public finalize() {
+		this.dataHistory = [];
+		this.historicalCount = 0;
+
 	}
 
 
