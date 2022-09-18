@@ -10,15 +10,14 @@ export declare class NMEA extends EventEmitter {
     magneticDeclination: number;
     private frequency;
     private lastRun;
-    useGPSClock: boolean;
-    private sentenceCounter;
-    private badSentenceList;
-    private badSentenceCount;
+    private useGPSClock;
+    private timeBaseOffset?;
+    sentenceCounter: number;
+    badSentenceCount: number;
     private trueWindSet;
     constructor(frequencyOfSamplingInSeconds?: number, useGPSClock?: boolean);
     loadFromObject(o: any): void;
     newSailPoint(sp: SailPoint): void;
-    status(): void;
     /******************************************************************************
      * This section contains routine that will take a SailPoint and emitt the
      * required NMEA sentences. e.g. reverse parsing. It generates the minimum
@@ -135,7 +134,7 @@ export declare class NMEA extends EventEmitter {
      * The string looks like this: ddmmyy
      *
      * ******************************************************************************************/
-    static parseNMEATimeAndDate(nmeaTime: string, nmeaDate?: string): any;
+    private parseNMEATimeAndDate;
     protected decimalToNMEAAngle(val: number): string;
     protected genNMEATime(t: Date): string;
     protected genNMEADate(t: Date): string;

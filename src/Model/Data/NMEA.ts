@@ -5,6 +5,7 @@ import { GPSPoint } from "../Data/GPSPoint";
 import { SailPoint } from "../Data/SailPoint";
 import { AIS } from "../Data/AIS";
 import { EventEmitter } from "events";
+import { differenceInMilliseconds } from "date-fns";
 
 
 /*[Bindable]*/export class NMEA extends EventEmitter {
@@ -20,42 +21,38 @@ import { EventEmitter } from "events";
 
 	//public var headingCorrection:int = 0;	// CORRECT FOR BAD CROCODILE INSTRUMENTS
 
-	private frequency: number;				// frequency of sampling (defaults to 1hz)
+	private frequency: number;			// frequency of sampling (defaults to 1hz)
 	private lastRun: Date;				// last time a sailpoint event was issued
-	public useGPSClock: boolean = false;			// if set, GPS time is used to issue sailpoint events
+
 	// this is used when parsing a static file, but will
 	// cause problems if the NMEA stream does not contains
 	// $xxRMC sentences
+	private useGPSClock: boolean = false;// if set, GPS time is used to issue sailpoint events
+	private timeBaseOffset?: number;		// stores the timebase used for timeStamping
 
-	private sentenceCounter: number;		// counts sentences
-	private badSentenceList: Array<string>;	// list of sentence we cannot parse
-	private badSentenceCount: number;			// number of malformed sentences
+	public sentenceCounter: number = 0;		// counts sentences
+	public badSentenceCount: number = 0;			// number of malformed sentences
+	// private badSentenceList: Array<string> = [];	// list of sentence we cannot parse
 
 	private trueWindSet: boolean = false;
 
 
-	constructor(frequencyOfSamplingInSeconds: number = 1, useGPSClock:boolean = false) {
+	constructor(frequencyOfSamplingInSeconds: number = 1, useGPSClock: boolean = false) {
 		super();	// initialize the emitter class
 		this.ais = new AIS();
 
 		this.useGPSClock = useGPSClock;
-
-		//this.dateStamp = new Date;
 
 		this.currentData = new SailPoint();
 
 		this.frequency = frequencyOfSamplingInSeconds * 1000;	// frequency of sample in milliseconds
 		this.lastRun = new Date(0);
 
-		this.sentenceCounter = 0;
 
-		this.badSentenceCount = 0;
-		this.badSentenceList = new Array();
-
-		// if we are not use GPS clock then emit a NMEA event at desired frequency
-		if (!this.useGPSClock) {
-			setInterval(this.emitNMEAEvent.bind(this), this.frequency)
-		}
+		// // if we are not use GPS clock then emit a NMEA event at desired frequency
+		// if (!this.useGPSClock) {
+		// 	setInterval(this.emitNMEAEvent.bind(this), this.frequency)
+		// }
 	}
 
 	public loadFromObject(o: any): void {
@@ -71,14 +68,13 @@ import { EventEmitter } from "events";
 	public newSailPoint(sp: SailPoint): void {
 		this.currentData = sp;
 		this.emit(NMEA.NMEA_EVENT_GPS_DATA, sp);
-		//this.dispatchEvent(new SailPointEvent(this.SailPointEvent.NEW_SAILPOINT, sp));
 	}
 
-	public status(): void {
-		console.log(this.badSentenceCount + " bad Sentences. Following Sentences Unparsed:");
-		console.log(this.badSentenceList);
-		console.log("Total Sentences read = ", this.sentenceCounter);
-	}
+	// public status(): void {
+	// 	console.log(this.badSentenceCount + " bad Sentences. Following Sentences Unparsed:");
+	// 	console.log(this.badSentenceList);
+	// 	console.log("Total Sentences read = ", this.sentenceCounter);
+	// }
 
 
 
@@ -180,7 +176,7 @@ import { EventEmitter } from "events";
 		}
 
 		// now signal to the world at the appropriate frequency
-		if (this.useGPSClock) this.signalIfSamplePeriodExpired();
+		this.signalIfSamplePeriodExpired();
 
 	}
 
@@ -189,11 +185,19 @@ import { EventEmitter } from "events";
 	// time that we use is either local time which is always present, or GPS time which depends the on $RMC sentence
 	// when parsing a log file, we MUST use GPS otherwise we cannot advance the time.
 	private signalIfSamplePeriodExpired(): void {
-		let t:Date = new Date(this.currentData.timeStamp);
+
+		let t: Date;
+		if (!this.currentData.isValid) return;
+		t = this.currentData.timeStamp;
+
+		// if lastRun wasn't set 
+		if (!this.lastRun) this.lastRun = t;
 
 		// check some error conditions: switching to an earlier time?
-		if (t.getTime() < this.lastRun.getTime())
-			this.lastRun.setTime(t.getTime())
+		if (t.getTime() < this.lastRun.getTime()) {
+			console.error("NMEA.ts: Time has moved backwards", t, this.lastRun);
+			this.lastRun.setTime(t.getTime());
+		}
 
 		// if we've exceed the period ==> create an SailPointEvent
 		if ((t.getTime() - this.lastRun.getTime()) > this.frequency) {
@@ -284,7 +288,7 @@ import { EventEmitter } from "events";
 			this.currentData.speedOverGround = parseFloat(tokens[7]);
 			this.currentData.courseOverGround = parseFloat(tokens[8]);
 
-			this.currentData.timeStamp = NMEA.parseNMEATimeAndDate(tokens[1], tokens[9]);
+			this.currentData.timeStamp = this.parseNMEATimeAndDate(tokens[1], tokens[9]);
 
 			if (tokens[1] == "A")	// tokens[1] validity: a-OK, v-warning) 
 				return false;
@@ -530,7 +534,7 @@ import { EventEmitter } from "events";
 			w.lon = NMEA.latlon2Decimal(tokens[4], tokens[5]);
 
 			// valid lat --> we have a fix --> time stamp is valid. 
-			w.timeStamp = NMEA.parseNMEATimeAndDate(tokens[1]);
+			//w.timeStamp = this.parseNMEATimeAndDate(tokens[1]);
 
 			this.currentData.waypoint = w;
 
@@ -553,7 +557,7 @@ import { EventEmitter } from "events";
 	 * 
 	 * ******************************************************************************************/
 
-	static parseNMEATimeAndDate(nmeaTime: string, nmeaDate?: string): any {
+	private parseNMEATimeAndDate(nmeaTime: string, nmeaDate: string): any {
 		var yy: number;
 		var mm: number;
 		var dd: number;
@@ -561,19 +565,6 @@ import { EventEmitter } from "events";
 
 		try {
 			if (nmeaTime == "") return null;
-
-			if (nmeaDate == null) {
-				yy = t.getUTCFullYear();
-				mm = t.getUTCMonth();
-				dd = t.getUTCDate();
-			}
-			else {
-				if (nmeaDate == "") return null;
-				// parse date
-				yy = parseInt(nmeaDate.substring(4, 6)) + 2000;
-				mm = parseInt(nmeaDate.substring(2, 4)) - 1;
-				dd = parseInt(nmeaDate.substring(0, 2));
-			}
 
 			// parse time
 			var hours: number = parseInt(nmeaTime.substring(0, 2)); // hours
@@ -587,7 +578,12 @@ import { EventEmitter } from "events";
 			if (nmeaTime.length == 9)
 				milliseconds = parseInt(nmeaTime.substring(8, 10)) * 10;
 
-			//if (hours == 0 && minutes == 0 && seconds == 0 && milliseconds == 0) milliseconds = 1;
+			// parse date
+			yy = parseInt(nmeaDate.substring(4, 6)) + 2000;
+			mm = parseInt(nmeaDate.substring(2, 4)) - 1;
+			dd = parseInt(nmeaDate.substring(0, 2));
+
+			// we have a valid GPS time.
 			t.setUTCFullYear(yy);
 			t.setUTCMonth(mm);
 			t.setUTCDate(dd);
@@ -595,6 +591,17 @@ import { EventEmitter } from "events";
 			t.setUTCMinutes(minutes);
 			t.setUTCSeconds(seconds);
 			t.setUTCMilliseconds(milliseconds);
+
+			// create a timeBaseOffset the first time around
+			if (!this.timeBaseOffset) {
+				 this.timeBaseOffset = new Date().getTime() - t.getTime();
+				 //console.log("NMEA Time offset set to ", this.timeBaseOffset);
+			}
+
+			// If we are not using GPS time, adjust with the prior offset
+			if (!this.useGPSClock) {
+				t.setTime(t.getTime() + this.timeBaseOffset)
+			}
 			return t;
 		}
 		catch (er) {

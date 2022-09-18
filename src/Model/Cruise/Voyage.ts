@@ -8,7 +8,7 @@ import { PeriodStats } from './PeriodStats';
 export class Voyage {
 
     underway: boolean = false;
-    startTime: Date = new Date();
+    startTime: Date = new Date();  
     voyageName: string = "";
     destination: GPSPoint = new GPSPoint();
     estimatedDTD: number = 0;
@@ -24,7 +24,10 @@ export class Voyage {
 
     // calculate elapsed days since the start of the cruise.
     get timeAtSea():number  {
-     return differenceInDays(new Date(), this.startTime)   
+        if (this.startTime && this.currentLocation.isValid) 
+            return differenceInDays(this.currentLocation.timeStamp, this.startTime);
+        else
+            return Number.NaN;
     }
 
     constructor(o?: any) {
