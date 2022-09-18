@@ -29,6 +29,7 @@ public loadFromObject(o:Polars):void
 			this.model = o.model;
 			this.year = o.year;
 			
+			this.myPolars = new Array();
 			o.myPolars.forEach ( (op:PolarTarget) =>
 			{
 				this.myPolars.push(new PolarTarget(op));

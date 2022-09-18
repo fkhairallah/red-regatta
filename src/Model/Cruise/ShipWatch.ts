@@ -30,10 +30,12 @@ export class ShipWatch {
     }
 
     loadFromObject(o: any) {
+        this.crewList = new Array();
         o.crewList.forEach((element: string) => { this.crewList.push(element) });
         this.startDate = new Date(o.startDate);
         this.hoursInWatch = o.hoursInWatch;
         this.captainsHour = o.captainsHour;
+        this.watchList = new Array();
         o.watchList.forEach((element: WatchBlock) => { this.watchList.push(element) });
         this.noRotation = o.noRotation;
         this.crewOnWatch = o.crewOnWatch;

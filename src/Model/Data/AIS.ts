@@ -53,6 +53,7 @@ export class AIS
 	{
 		this.myMMSI = o.myMMSI;
 		// load targets
+		this.targets = new Array();
 		for (var i:number=0;i<o.targets.length;i++)
 		{
 			this.targets.push(new AISTarget(o.targets[i]));

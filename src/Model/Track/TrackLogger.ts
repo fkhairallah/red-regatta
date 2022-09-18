@@ -31,6 +31,7 @@ export class TrackLogger
 	{
 		this.target = o.target;
 		
+		this.track = new Array();
 		for  (let t of (o.track )) {
 			this.track.push(new SailPoint(t));
 		}

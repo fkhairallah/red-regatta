@@ -51,7 +51,7 @@ export class Voyage {
             this.dayStats = new PeriodStats(o.dayStats);
             this.dayDistance = new RunningAverage(1,0,o.dayDistance);
             if (o.segmentStats) {
-                this.segmentStats.splice(0);
+                this.segmentStats = new Array();
                 o.segmentStats.forEach((day: any) => { this.segmentStats.push(new PeriodStats(day)) });
             }
         }
