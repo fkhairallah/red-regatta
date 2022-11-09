@@ -27,6 +27,7 @@ export declare class CruiseConfig {
     logFileHours: number;
     logBackupLocation: string;
     logBackupFrequency: number;
+    listBackupLocations?: string[];
     constructor(o?: any);
     loadFromObject(o: any): void;
 }

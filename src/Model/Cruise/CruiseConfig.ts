@@ -60,6 +60,10 @@ export class CruiseConfig {
     logBackupLocation: string = '/media/usb';   // where to backup file
     logBackupFrequency: number = 24;    // how often to backup log files
 
+// this value is not persisted by is used to carry list of potential 
+// backup location (USB drives in RPI)
+    listBackupLocations?: string[]; // locations where files can be backed up
+
 
     constructor(o?: any) {
         if (o) {
