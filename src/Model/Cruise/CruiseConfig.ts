@@ -47,15 +47,18 @@ export class NMEASerial {
 
 export class CruiseConfig {
 
-    name: string = "Ship Name";
-    logToConsole: boolean = false;
-    tcpPort: number = 8080;
-    udpPort: number = 8081;
-    srcLog: CruiseLog[] = [];
-    dstLog: CruiseLog[] = [];
-    srcSerial: NMEASerial[] = [];
-    logToUDP: boolean = false;
-    udpOutPort: number = 10110;
+    name: string = "Ship Name";     // Ship's name
+    logToConsole: boolean = false;  // send NMEA stream to console for debuggin
+    tcpPort: number = 8080;         // input TCP port (0 -- do nothing)
+    udpPort: number = 8081;         // input UDP port (0 -- do nothing)
+    srcLog: CruiseLog[] = [];       // log file to read and emulate
+    dstLog: CruiseLog[] = [];       // where to store all NMEA data
+    srcSerial: NMEASerial[] = [];   // serial ports sourcing NMEA data
+    logToUDP: boolean = false;      // Broadcast all reception to UDP
+    udpOutPort: number = 10110;     // default UDP output port
+    logFileHours: number = 24;      // number of hours before starting a new log file
+    logBackupLocation: string = '/media/usb';   // where to backup file
+    logBackupFrequency: number = 24;    // how often to backup log files
 
 
     constructor(o?: any) {
@@ -87,6 +90,8 @@ export class CruiseConfig {
 
             this.logToUDP = o.logToUDP;
             this.udpOutPort = o.udpOutPort;
+            this.logBackupLocation = o.logBackupLocation;
+            this.logBackupFrequency = o.logBackupFrequency;
         }
     }
 

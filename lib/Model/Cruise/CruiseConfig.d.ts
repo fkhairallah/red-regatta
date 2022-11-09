@@ -24,6 +24,9 @@ export declare class CruiseConfig {
     srcSerial: NMEASerial[];
     logToUDP: boolean;
     udpOutPort: number;
+    logFileHours: number;
+    logBackupLocation: string;
+    logBackupFrequency: number;
     constructor(o?: any);
     loadFromObject(o: any): void;
 }
