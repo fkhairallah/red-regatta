@@ -8,7 +8,7 @@ Repurposing AS3 [Red]Regatta into a typescript library
 
     - moved CruiseConfig classes
     - minor fix for NMEA.useGPSTime logic (1.4.2)
-    - configuration now support backup of log file (1.4.3)
+    - configuration now support backup of log file (1.4.4)
 
 ### V1.3
 

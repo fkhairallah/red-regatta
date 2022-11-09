@@ -96,6 +96,14 @@ export class CruiseConfig {
             this.udpOutPort = o.udpOutPort;
             this.logBackupLocation = o.logBackupLocation;
             this.logBackupFrequency = o.logBackupFrequency;
+
+            // load list of backup locations if any
+            if (o.listBackupLocations) {
+                this.listBackupLocations = [];
+                o.listBackupLocations.forEach((element:string) => {
+                this.listBackupLocations?.push(element)
+             });
+            }
         }
     }
 
