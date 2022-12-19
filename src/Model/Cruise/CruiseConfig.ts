@@ -46,13 +46,22 @@ export enum PortType {
   NMEA0183 = "NMEA 0183",
   NMEA2000 = "NMEA 2000",
 }
+export enum PortDirection {
+  IN = "IN",
+  OUT = "OUT"
+}
+export enum PortProtocol {
+  UDP = "UDP",
+  //TCP = "TCP"
+}
 
 export class NetworkPort {
   name: string = "port";
   enabled: boolean = false;
   type: PortType = PortType.NMEA0183;
-  udpPort: number = 10110;
-  tcpPort: number = 5555;
+  direction: PortDirection = PortDirection.IN;
+  protocol: PortProtocol = PortProtocol.UDP;
+  port: number = 10110;
   constructor(o?: any) {
     if (o) this.loadFromObject(o);
   }
@@ -61,8 +70,9 @@ export class NetworkPort {
       this.name = o?.name;
       this.enabled = o?.enabled;
       this.type = o?.type;
-      this.udpPort = o?.udpPort;
-      this.tcpPort = o?.tcpPort;
+      this.direction = o?.direction;
+      this.protocol = o?.protocol;
+      this.port = o?.port;
     }
   }
 }
@@ -76,8 +86,6 @@ export class CruiseConfig {
   srcLog: CruiseLog[] = []; // log file to read and emulate
   dstLog: CruiseLog[] = []; // where to store all NMEA data
   srcSerial: NMEASerial[] = []; // serial ports sourcing NMEA data
-  logToUDP: boolean = false; // Broadcast all reception to UDP
-  udpOutPort: number = 10110; // default UDP output port
   logFileHours: number = 24; // number of hours before starting a new log file
   logBackupLocation: string = "/media/usb"; // where to backup file
   logBackupFrequency: number = 24; // how often to backup log files
@@ -121,8 +129,10 @@ export class CruiseConfig {
           this.dstLog.push(new CruiseLog(element));
         });
 
-      this.logToUDP = o.logToUDP;
-      this.udpOutPort = o.udpOutPort;
+      // this.logToUDP = o.logToUDP;
+      // this.udpOutPort = o.udpOutPort;
+
+      // backup
       this.logBackupLocation = o.logBackupLocation;
       this.logBackupFrequency = o.logBackupFrequency;
 

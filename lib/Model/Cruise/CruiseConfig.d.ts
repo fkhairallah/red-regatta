@@ -18,12 +18,20 @@ export declare enum PortType {
     NMEA0183 = "NMEA 0183",
     NMEA2000 = "NMEA 2000"
 }
+export declare enum PortDirection {
+    IN = "IN",
+    OUT = "OUT"
+}
+export declare enum PortProtocol {
+    UDP = "UDP"
+}
 export declare class NetworkPort {
     name: string;
     enabled: boolean;
     type: PortType;
-    udpPort: number;
-    tcpPort: number;
+    direction: PortDirection;
+    protocol: PortProtocol;
+    port: number;
     constructor(o?: any);
     loadFromObject(o: any): void;
 }
@@ -34,8 +42,6 @@ export declare class CruiseConfig {
     srcLog: CruiseLog[];
     dstLog: CruiseLog[];
     srcSerial: NMEASerial[];
-    logToUDP: boolean;
-    udpOutPort: number;
     logFileHours: number;
     logBackupLocation: string;
     logBackupFrequency: number;

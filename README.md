@@ -6,6 +6,7 @@ Repurposing AS3 [Red]Regatta into a typescript library
 
 ## V1.5
     - Introduced NetworkPort to CruiseConfig class. We are now able to read NMEA0183 and NMEA2000
+    - consolidate all port configuration into a single one (type, direction, protocol )
 
 ### V1.4
 
