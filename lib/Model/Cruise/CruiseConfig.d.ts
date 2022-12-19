@@ -40,7 +40,7 @@ export declare class CruiseConfig {
     logToConsole: boolean;
     networkPorts: NetworkPort[];
     srcLog: CruiseLog[];
-    dstLog: CruiseLog[];
+    dstLog: CruiseLog;
     srcSerial: NMEASerial[];
     logFileHours: number;
     logBackupLocation: string;

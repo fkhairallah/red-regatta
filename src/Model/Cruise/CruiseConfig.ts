@@ -84,7 +84,7 @@ export class CruiseConfig {
   //udpPort: number = 8081;         // input UDP port (0 -- do nothing)
   networkPorts: NetworkPort[] = []; // Input Network Port
   srcLog: CruiseLog[] = []; // log file to read and emulate
-  dstLog: CruiseLog[] = []; // where to store all NMEA data
+  dstLog: CruiseLog = new CruiseLog(); // where to store all NMEA data
   srcSerial: NMEASerial[] = []; // serial ports sourcing NMEA data
   logFileHours: number = 24; // number of hours before starting a new log file
   logBackupLocation: string = "/media/usb"; // where to backup file
@@ -123,14 +123,9 @@ export class CruiseConfig {
         o.networkPorts.forEach((element: any) => {
           this.networkPorts.push(new NetworkPort(element));
         });
-      // load dstLog
-      if (o.dstLog)
-        o.dstLog.forEach((element: any) => {
-          this.dstLog.push(new CruiseLog(element));
-        });
 
-      // this.logToUDP = o.logToUDP;
-      // this.udpOutPort = o.udpOutPort;
+        // load dstLog
+      if (o.dstLog) this.dstLog.loadFromObject(o.dstLog);
 
       // backup
       this.logBackupLocation = o.logBackupLocation;
