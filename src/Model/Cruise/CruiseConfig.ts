@@ -120,7 +120,7 @@ export class CruiseConfig {
         });
       // load network ports
       if (o.networkPorts)
-        o.networkPorts.array.forEach((element: any) => {
+        o.networkPorts.forEach((element: any) => {
           this.networkPorts.push(new NetworkPort(element));
         });
       // load dstLog
