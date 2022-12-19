@@ -122,7 +122,6 @@ export class CruiseConfig {
       if (o.networkPorts)
         o.networkPorts.forEach((element: any) => {
           this.networkPorts.push(new NetworkPort(element));
-          console.log("Port", element)
         });
       // load dstLog
       if (o.dstLog)
