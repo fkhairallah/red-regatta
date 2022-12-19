@@ -90,22 +90,6 @@ export class CruiseConfig {
     if (o) {
       this.loadFromObject(o);
     }
-    if (this.networkPorts.length == 0) {
-      this.networkPorts.push(
-        new NetworkPort({
-          name: "NMEA0183",
-          enabled: false,
-          type: PortType.NMEA0183,
-        })
-      );
-      this.networkPorts.push(
-        new NetworkPort({
-          name: "NMEA2000",
-          enabled: false,
-          type: PortType.NMEA2000,
-        })
-      );
-    }
   }
 
   loadFromObject(o: any) {

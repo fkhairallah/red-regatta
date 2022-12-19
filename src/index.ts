@@ -10,7 +10,7 @@ export { RaceStatus } from './Model/Course/RaceStatus';
 // Cruise
 //export { Cruise } from './Model/Cruise/Cruise';
 export { Owner } from './Model/Cruise/Owner';
-export { CruiseLog, NMEASerial, CruiseConfig } from './Model/Cruise/CruiseConfig'
+export { CruiseLog, NMEASerial, CruiseConfig, PortType, NetworkPort } from './Model/Cruise/CruiseConfig'
 export { Equipment, Module, Service } from './Model/Cruise/Maintenance';
 export { PeriodStats } from './Model/Cruise/PeriodStats';
 export { LogEntry, StandingOrders } from './Model/Cruise/shiplog';
