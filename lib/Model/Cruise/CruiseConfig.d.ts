@@ -14,11 +14,23 @@ export declare class NMEASerial {
     constructor(o?: any);
     loadFromObject(o: any): void;
 }
+export declare enum PortType {
+    NMEA0183 = "NMEA 0183",
+    NMEA2000 = "NMEA 2000"
+}
+export declare class NetworkPort {
+    name: string;
+    enabled: boolean;
+    type: PortType;
+    udpPort: number;
+    tcpPort: number;
+    constructor(o?: any);
+    loadFromObject(o: any): void;
+}
 export declare class CruiseConfig {
     name: string;
     logToConsole: boolean;
-    tcpPort: number;
-    udpPort: number;
+    networkPorts: NetworkPort[];
     srcLog: CruiseLog[];
     dstLog: CruiseLog[];
     srcSerial: NMEASerial[];

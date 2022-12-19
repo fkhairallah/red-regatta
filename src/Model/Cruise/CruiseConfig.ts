@@ -1,3 +1,4 @@
+
 export class CruiseLog {
     name: string = "Log";
     enabled: boolean = false;
@@ -44,13 +45,39 @@ export class NMEASerial {
 
 }
 
+export enum PortType {
+    NMEA0183 = "NMEA 0183",
+    NMEA2000 = "NMEA 2000"
+}
+
+export class NetworkPort {
+    name: string = "port";
+    enabled: boolean = false;
+    type: PortType = PortType.NMEA0183;
+    udpPort: number = 10110;
+    tcpPort: number = 5555;
+    constructor(o?:any) {
+        if (o) this.loadFromObject(o);
+    }
+    loadFromObject(o:any) {
+        if (o) {
+            this.name = o.name;
+            this.enabled = o.enabled;
+            this.type = o.type;
+            this.udpPort = o.udpPort;
+            this.tcpPort = o.tcpPort;
+        }
+    }
+}
+
 
 export class CruiseConfig {
 
     name: string = "Ship Name";     // Ship's name
     logToConsole: boolean = false;  // send NMEA stream to console for debuggin
-    tcpPort: number = 8080;         // input TCP port (0 -- do nothing)
-    udpPort: number = 8081;         // input UDP port (0 -- do nothing)
+    //tcpPort: number = 8080;         // input TCP port (0 -- do nothing)
+    //udpPort: number = 8081;         // input UDP port (0 -- do nothing)
+    networkPorts: NetworkPort[] = [];    // Input Network Port
     srcLog: CruiseLog[] = [];       // log file to read and emulate
     dstLog: CruiseLog[] = [];       // where to store all NMEA data
     srcSerial: NMEASerial[] = [];   // serial ports sourcing NMEA data
@@ -75,8 +102,8 @@ export class CruiseConfig {
         if (o) {
             this.name = o.name;
             this.logToConsole = o.logToConsole
-            this.udpPort = o.udpPort;
-            this.tcpPort = o.tcpPort;
+            //this.udpPort = o.udpPort;
+            //this.tcpPort = o.tcpPort;
 
             // load src serial
             if (o.srcSerial) o.srcSerial.forEach((element: any) => {
@@ -86,6 +113,10 @@ export class CruiseConfig {
             // load srcLog
             if (o.srcLog) o.srcLog.forEach((element: any) => {
                 this.srcLog.push(new CruiseLog(element));
+            });
+            // load network ports
+            if (o.networkPorts) o.networkPorts.array.forEach((element:any) => {
+                this.networkPorts.push(new NetworkPort(element))
             });
             // load dstLog
             if (o.dstLog) o.dstLog.forEach((element: any) => {
