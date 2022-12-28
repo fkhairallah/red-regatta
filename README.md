@@ -8,6 +8,7 @@ Repurposing AS3 [Red]Regatta into a typescript library
     - Introduced NetworkPort to CruiseConfig class. We are now able to read NMEA0183 and NMEA2000
     - consolidate all port configuration into a single one (type, direction, protocol )
     - changed dstLog to a single entry (was array)
+    - watch schedule now includes start hour
 
 ### V1.4
 

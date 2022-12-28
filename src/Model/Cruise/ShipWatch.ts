@@ -43,7 +43,7 @@ export class ShipWatch {
 
     // Given a start date, a length of a watch, create a time schedule
     public setupWatch() {
-        let wStart: number = 0;
+        let wStart: number = this.startDate.getHours();
         this.watchList = [];
         let numberOfCrewWatches: number = 0;
         do {
