@@ -94,7 +94,7 @@ export class ShipWatch {
    * @param date
    * @returns corresponding wath from watchList
    */
-  private getWatchType(date: Date): WatchBlock {
+  public getWatchArchetype(date: Date): WatchBlock {
     let hour = date.getHours();
     return this.watchList.filter((v) => {
       return hour >= v.start && hour < v.end;
@@ -123,7 +123,7 @@ export class ShipWatch {
     console.log("after")
     // after the start. Do the complex calculations
     do {
-      newWatch = this.getWatchType(runDate);
+      newWatch = this.getWatchArchetype(runDate);
       // check to see if date is greater or equal to the watch start AND less than watch end
       if (date >= runDate && date < addHours(runDate, this.hoursInWatch)) {
         inRange = true;

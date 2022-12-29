@@ -35,7 +35,7 @@ export declare class ShipWatch {
      * @param date
      * @returns corresponding wath from watchList
      */
-    private getWatchType;
+    getWatchArchetype(date: Date): WatchBlock;
     /**
      * Given a data/time return the correct WatchBlock populated with the correct crew
      *
