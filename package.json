@@ -1,6 +1,6 @@
 {
   "name": "red-regatta",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "Repackage AS3 [RED]Regatta as TypeScript library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,7 @@
     "typescript": "^4.5.5"
   },
   "scripts": {
-    "Test": "echo \"Error: no test specified\" && exit 1",
+    "Test": "echo 'test watch' && tsc && node ./lib/app.js",
     "Build": "tsc",
     "Clean Build": "rimraf ./lib && tsc"
   },
