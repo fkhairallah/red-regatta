@@ -1,4 +1,4 @@
-import { addDays, addHours, format } from "date-fns";
+import { addDays, addHours, format, subHours } from "date-fns";
 
 export interface WatchBlock {
   //id: Number;
@@ -144,14 +144,6 @@ export class ShipWatch {
     return newWatch;
   }
 
-  //   public getWatchNumber(date: Date): number {
-  //     let hour = date.getHours();
-  //     this.watchList.forEach((watch, index) => {
-  //       if (watch.start <= hour && watch.end > hour) return index;
-  //     });
-  //     return -1;
-  //   }
-
   /**
    * return a list of n watches starting at a specific date
    * @param numberOfWatches how many to return
@@ -172,6 +164,18 @@ export class ShipWatch {
 /**************************************************************************************
  * this section generates table suitable for display to make it easier on viewtify
  */
+
+/**
+ * Get the list of watches for the next 24 hours
+ * 
+ * @returns list of watches from 2 watches ago to the next day
+ */
+public getTodaysWatches():WatchBlock[] {
+  let date = subHours(new Date(), 2* this.hoursInWatch);
+  let numberOfWatches = Math.floor(24 / this.hoursInWatch) + 2;
+  return this.getWatchList(numberOfWatches, date);
+
+}
 
   /**
    * given the length of a cruise in days, it uses the startDate to

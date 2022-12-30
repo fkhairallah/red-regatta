@@ -54,6 +54,12 @@ export declare class ShipWatch {
      * this section generates table suitable for display to make it easier on viewtify
      */
     /**
+     * Get the list of watches for the next 24 hours
+     *
+     * @returns list of watches from 2 watches ago to the next day
+     */
+    getTodaysWatches(): WatchBlock[];
+    /**
      * given the length of a cruise in days, it uses the startDate to
      * generate a list of dates
      *
