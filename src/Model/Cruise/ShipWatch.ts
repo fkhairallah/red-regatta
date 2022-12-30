@@ -120,7 +120,6 @@ export class ShipWatch {
       crew: "",
     };
 
-    console.log("after")
     // after the start. Do the complex calculations
     do {
       newWatch = this.getWatchArchetype(runDate);
