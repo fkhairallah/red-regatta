@@ -35,6 +35,10 @@ export class ShipWatch {
     o.crewList.forEach((element: string) => {
       this.crewList.push(element);
     });
+    this.reservedList = new Array();
+    o.reservedList.forEach((element:any) => {
+        this.reservedList.push(element)
+    })
     this.startDate = new Date(o.startDate);
     this.hoursInWatch = o.hoursInWatch;
     this.watchList = new Array();
