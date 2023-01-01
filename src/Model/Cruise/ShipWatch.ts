@@ -218,6 +218,7 @@ public getTodaysWatches():WatchBlock[] {
     // watchCrew[day of watch][watch number] = crew name
     let watchCrew: string[][] = [];
     let day = new Date(this.startDate);
+    day.setHours(this.watchList[0].start)
 
     // fill the array with empty strings
     for (let i = 0; i < this.watchList.length; i++) {

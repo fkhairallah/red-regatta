@@ -8,7 +8,7 @@ const sw = new ShipWatch();
 sw.startDate = new Date(startDate);
 sw.crewList = ["Fady", "Joe", "Taleb", "lou"]
 sw.reservedList = [
-   { crew: "CAPTAIN", start: 15 },
+   { crew: "CAPTAIN", start: 13 },
    //   { crew: "SAM", start: 14 },
 ];
 sw.hoursInWatch = 2;
@@ -22,12 +22,11 @@ console.log(sw)
 //console.log(sw.getWatch(newDate))
 
 let newDate = new Date(startDate);
-for (let i = 0; i < 24; i++) {
-   //console.log("index", i, (i/sw.hoursInWatch).toFixed(), i % sw.hoursInWatch)
-   newDate.setHours(i)
-   console.log(i, sw.getWatchArchetype(newDate))
-   newDate = addHours(newDate, 1)
-}
+// for (let i = 0; i < 24; i++) {
+//    newDate.setHours(i)
+//    console.log(i, sw.getWatchArchetype(newDate))
+//    newDate = addHours(newDate, 1)
+// }
 
 console.log(sw.getWatchList(12,newDate))
 
