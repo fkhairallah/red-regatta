@@ -58,9 +58,11 @@ export class ShipWatch {
    * is asked for
    */
   public setupWatch() {
-    let wStart: number = 0;
+    let wStart: number = this.startDate.getHours() % this.hoursInWatch;
     this.watchList = [];
     let numberOfRotatedCrewWatches: number = 0;
+
+    // loop through creating watch block template
     do {
       let newWatch: WatchBlock = {
         start: wStart,
@@ -80,7 +82,7 @@ export class ShipWatch {
       if (!newWatch.reserved) numberOfRotatedCrewWatches++;
 
       // make sure we don't go over the end of the day
-      if (newWatch.end > 24) newWatch.end = 24;
+      if (newWatch.end > 24) newWatch.end -=  24;
 
       // add it to list and increment start time
       this.watchList.push(newWatch);
@@ -100,9 +102,12 @@ export class ShipWatch {
    */
   public getWatchArchetype(date: Date): WatchBlock {
     let hour = date.getHours();
-    return this.watchList.filter((v) => {
-      return hour >= v.start && hour < v.end;
-    })[0];
+    let result =  this.watchList.filter((v) => {
+      return hour >= v.start && hour < (v.start + this.hoursInWatch);
+    });
+
+    if (result.length != 1)console.error("Filter ERROR", hour, result);
+    return result[0]
   }
 
   /**
@@ -205,16 +210,12 @@ public getTodaysWatches():WatchBlock[] {
     // watchCrew[day of watch][watch number] = crew name
     let watchCrew: string[][] = [];
     let day = new Date(this.startDate);
-    day.setHours(0);
-    day.setMinutes(0);
-    day.setMilliseconds(0);
-    let hour = 0;
+
     // fill the array with empty strings
     for (let i = 0; i < this.watchList.length; i++) {
       watchCrew.push([]);
-      watchCrew[i][0] = hour.toString()+":00";
-      hour += this.hoursInWatch;
-      watchCrew[i][1] = hour.toString()+":00"
+      watchCrew[i][0] = this.watchList[i].start.toString()+":00";
+      watchCrew[i][1] = this.watchList[i].end.toString() + ":00";
     }
 
     for (let j = 0; j < numberOfDays; j++) {
