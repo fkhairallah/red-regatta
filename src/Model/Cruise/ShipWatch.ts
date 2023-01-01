@@ -103,7 +103,15 @@ export class ShipWatch {
   public getWatchArchetype(date: Date): WatchBlock {
     let hour = date.getHours();
     let result =  this.watchList.filter((v) => {
-      return hour >= v.start && hour < (v.start + this.hoursInWatch);
+      if (v.start<v.end) return hour >= v.start && hour < (v.end);
+
+      // if we watch straddles end of day ==> shift it by 1 watch
+      if (v.start>v.end) {
+        let s = (v.start + this.hoursInWatch) % 24;
+        let e = (v.end + this.hoursInWatch) % 24;
+        hour = (hour + this.hoursInWatch) % 24;
+        return hour >= s && hour < (e);
+      }
     });
 
     if (result.length != 1)console.error("Filter ERROR", hour, result);
