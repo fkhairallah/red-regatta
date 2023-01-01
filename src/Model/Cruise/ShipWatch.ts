@@ -171,7 +171,7 @@ export class ShipWatch {
  * @returns list of watches from 2 watches ago to the next day
  */
 public getTodaysWatches():WatchBlock[] {
-  let date = subHours(new Date(), 2* this.hoursInWatch);
+  let date = subHours(new Date(), 2 * this.hoursInWatch);
   let numberOfWatches = Math.floor(24 / this.hoursInWatch) + 2;
   return this.getWatchList(numberOfWatches, date);
 
@@ -186,7 +186,7 @@ public getTodaysWatches():WatchBlock[] {
    */
   public getDates(cruiseDuration: number): string[] {
     let newDate: Date = new Date(this.startDate);
-    let dates: string[] = [];
+    let dates: string[] = ["From", "To"];
     for (let i = 0; i < cruiseDuration; i++) {
       let dateString: string = format(newDate, "eee do");
       dates.push(dateString);
@@ -205,15 +205,21 @@ public getTodaysWatches():WatchBlock[] {
     // watchCrew[day of watch][watch number] = crew name
     let watchCrew: string[][] = [];
     let day = new Date(this.startDate);
-    day.setHours(0)
+    day.setHours(0);
+    day.setMinutes(0);
+    day.setMilliseconds(0);
+    let hour = 0;
     // fill the array with empty strings
     for (let i = 0; i < this.watchList.length; i++) {
       watchCrew.push([]);
+      watchCrew[i][0] = hour.toString()+":00";
+      hour += this.hoursInWatch;
+      watchCrew[i][1] = hour.toString()+":00"
     }
 
     for (let j = 0; j < numberOfDays; j++) {
         let wbl = this.getWatchList(this.watchList.length, day)
-        for (let i=0;i<wbl.length;i++) watchCrew[i][j] = wbl[i].crew;
+        for (let i=0;i<wbl.length;i++) watchCrew[i][j+2] = wbl[i].crew;
         day = addDays(day,1);
       }
     return watchCrew;

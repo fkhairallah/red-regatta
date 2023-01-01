@@ -1,6 +1,6 @@
 import { addHours } from 'date-fns';
 import { ShipWatch } from './Model/Cruise/ShipWatch';
-let startDate = new Date("2022-12-28T14:00");
+let startDate = new Date("2022-12-30T13:00");
 startDate.setHours(14)
 console.log(startDate)
 
@@ -9,7 +9,7 @@ const sw = new ShipWatch();
 sw.startDate = new Date(startDate);
 sw.crewList = ["Fady", "Joe", "Taleb", "lou"]
 sw.reservedList = [
-   { crew: "CAPTAIN", start: 12 },
+   { crew: "CAPTAIN", start: 14 },
 //   { crew: "SAM", start: 14 },
 ];
 sw.hoursInWatch = 2;
@@ -22,11 +22,10 @@ console.log(sw)
 // console.log(sw.getWatch(newDate))
 // newDate = addHours(newDate,1)
 // }
+console.log(sw.getDates(5));
+
 console.log(sw.getWatchListAsTable( 5))
-console.log(
-  "yo",
-  startDate.getTime(),
-  new Date("2022-12-28T00:00").getTime(),
-);
-console.log(sw.getWatch(new Date("2022-12-28T00:00")))
+
+//console.log(sw.getWatchList(sw.watchList.length, new Date(sw.startDate)));
+//console.log(sw.getTodaysWatches());
 
