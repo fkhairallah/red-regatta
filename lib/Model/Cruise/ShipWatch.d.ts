@@ -16,7 +16,7 @@ export declare class ShipWatch {
     hoursInWatch: number;
     watchList: WatchBlock[];
     noRotation: boolean;
-    crewOnWatch: string;
+    get crewOnWatch(): string;
     constructor(srcObject?: any);
     loadFromObject(o: any): void;
     /**
