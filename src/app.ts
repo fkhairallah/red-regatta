@@ -32,6 +32,8 @@ console.log(sw.getWatchList(12,newDate))
 
 console.log(sw.getWatchListAsTable( 5))
 
+console.log(sw.crewOnWatch)
+
 //console.log(sw.getWatchList(sw.watchList.length, new Date(sw.startDate)));
 //console.log(sw.getTodaysWatches());
 

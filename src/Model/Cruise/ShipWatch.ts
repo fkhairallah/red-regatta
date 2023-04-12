@@ -23,7 +23,10 @@ export class ShipWatch {
   public hoursInWatch: number = 2;
   public watchList: WatchBlock[] = [];
   public noRotation: boolean = false;
-  public crewOnWatch: string = "";
+  public get crewOnWatch() {
+    var x = this.getWatch(new Date())
+    return x.crew;
+  }
 
   constructor(srcObject?: any) {
     // if param passed ==> use it to populate the object
@@ -46,7 +49,7 @@ export class ShipWatch {
       this.watchList.push(element);
     });
     this.noRotation = o.noRotation;
-    this.crewOnWatch = o.crewOnWatch;
+    //this.crewOnWatch = o.crewOnWatch;
   }
 
   /**
