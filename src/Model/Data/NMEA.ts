@@ -138,7 +138,7 @@ import { differenceInMilliseconds } from "date-fns";
 				this.parseHDG(tokens);
 				break;
 			case "GGA": // GPS fix data
-				//parseGGA(tokens);
+				this.parseGGA(tokens);
 				break;
 			case "GLL": // Geo Position
 				//parseGLL(tokens);
