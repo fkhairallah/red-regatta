@@ -144,10 +144,11 @@ import { differenceInMilliseconds } from "date-fns";
 				//parseGLL(tokens);
 				break;
 			case "RMC": // Geo Position
-			case "GGA":
 				this.parseRMC(tokens);
 				break;
-
+			case "GGA":
+				this.parseGGA(tokens);
+				break;
 			case "DBT":	// Depth Below transducer
 				this.parseDBT(tokens);
 				break;
