@@ -137,9 +137,6 @@ import { differenceInMilliseconds } from "date-fns";
 			case "HDG": // heading
 				this.parseHDG(tokens);
 				break;
-			case "GGA": // GPS fix data
-				this.parseGGA(tokens);
-				break;
 			case "GLL": // Geo Position
 				//parseGLL(tokens);
 				break;
@@ -279,17 +276,15 @@ import { differenceInMilliseconds } from "date-fns";
 	*/
 	private parseGGA(tokens: any[]): boolean {
 		try {
-			var x: number = NMEA.latlon2Decimal(tokens[3], tokens[4]);
+			var x: number = NMEA.latlon2Decimal(tokens[2], tokens[3]);
 			if (isNaN(x)) return false;	// no fix - ignore sentence
 
 			// valid lan --> we have a fix --> time stamp is valid. 
 			this.currentData.lat = x;
-			this.currentData.lon = NMEA.latlon2Decimal(tokens[5], tokens[6]);
+			this.currentData.lon = NMEA.latlon2Decimal(tokens[4], tokens[6]);
 
-			this.currentData.speedOverGround = parseFloat(tokens[7]);
-			this.currentData.courseOverGround = parseFloat(tokens[8]);
 
-			this.currentData.timeStamp = this.parseNMEATimeAndDate(tokens[1], tokens[9]);
+			this.currentData.timeStamp = this.parseNMEATimeAndDate(tokens[1], "");
 
 			if (tokens[6] == "0")	// tokens[6] validity: a-OK, v-warning) 
 				return false;
@@ -638,24 +633,26 @@ import { differenceInMilliseconds } from "date-fns";
 			if (nmeaTime.length == 9)
 				milliseconds = parseInt(nmeaTime.substring(8, 10)) * 10;
 
-			// parse date
-			yy = parseInt(nmeaDate.substring(4, 6)) + 2000;
-			mm = parseInt(nmeaDate.substring(2, 4)) - 1;
-			dd = parseInt(nmeaDate.substring(0, 2));
+			if (nmeaDate != "") {
+				// parse date
+				yy = parseInt(nmeaDate.substring(4, 6)) + 2000;
+				mm = parseInt(nmeaDate.substring(2, 4)) - 1;
+				dd = parseInt(nmeaDate.substring(0, 2));
 
-			// we have a valid GPS time.
-			t.setUTCFullYear(yy);
-			t.setUTCMonth(mm);
-			t.setUTCDate(dd);
-			t.setUTCHours(hours);
-			t.setUTCMinutes(minutes);
-			t.setUTCSeconds(seconds);
-			t.setUTCMilliseconds(milliseconds);
+				// we have a valid GPS time.
+				t.setUTCFullYear(yy);
+				t.setUTCMonth(mm);
+				t.setUTCDate(dd);
+				t.setUTCHours(hours);
+				t.setUTCMinutes(minutes);
+				t.setUTCSeconds(seconds);
+				t.setUTCMilliseconds(milliseconds);
+			}
 
 			// create a timeBaseOffset the first time around
 			if (!this.timeBaseOffset) {
-				 this.timeBaseOffset = new Date().getTime() - t.getTime();
-				 //console.log("NMEA Time offset set to ", this.timeBaseOffset);
+				this.timeBaseOffset = new Date().getTime() - t.getTime();
+				//console.log("NMEA Time offset set to ", this.timeBaseOffset);
 			}
 
 			// If we are not using GPS time, adjust with the prior offset
