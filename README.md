@@ -7,6 +7,7 @@ Repurposing AS3 [Red]Regatta into a typescript library
 ## V1.6
     - refactored Watch class to allow reserved slots instead of just captain's hour
     - redid all logic to rely on a single routine that will get the watch info for a specific date
+    - added GGA sentence 
 
 ## V1.5
     - Introduced NetworkPort to CruiseConfig class. We are now able to read NMEA0183 and NMEA2000

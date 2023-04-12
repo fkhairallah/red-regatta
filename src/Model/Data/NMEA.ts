@@ -144,6 +144,7 @@ import { differenceInMilliseconds } from "date-fns";
 				//parseGLL(tokens);
 				break;
 			case "RMC": // Geo Position
+			case "GGA":
 				this.parseRMC(tokens);
 				break;
 
@@ -244,6 +245,64 @@ import { differenceInMilliseconds } from "date-fns";
 	}
 	protected genHDG(sp: SailPoint): string {
 		var s: string = "$RRHDG,{sp.trueHeading.toFixed(1)},,,{Math.abs(this.magneticDeclination).toFixed(1)},{this.genEastWest(this.magneticDeclination)}*";
+		s += NMEA.calculateCheckSum(s);
+		return s;
+	}
+
+	/* === GGA - Navigation Information ===
+	------------------------------------------------------------------------------
+	12
+	1         2 3       4 5        6  7   8   9    10 11|  13
+	|         | |       | |        |  |   |   |    |  | |   |
+	$--RMC,hhmmss.ss,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,xxxx,x.x,a,m,*hh<CR><LF>
+	------------------------------------------------------------------------------
+	
+	Field Number:
+	
+	1. UTC Time
+	2. Latitude
+	3. N or S
+	4. Longitude
+	5. E or W
+	6. GPS Quality (0 not valid)
+	7. number if SV in use
+	8. HDOP
+	9. Orthometric height
+	10. unit of height
+	11. GEOID
+	12. M: GEOID separation
+	13: age of dGPS
+	14. Ref ID
+	15. Checksum
+	
+	*/
+	private parseGGA(tokens: any[]): boolean {
+		try {
+			var x: number = NMEA.latlon2Decimal(tokens[3], tokens[4]);
+			if (isNaN(x)) return false;	// no fix - ignore sentence
+
+			// valid lan --> we have a fix --> time stamp is valid. 
+			this.currentData.lat = x;
+			this.currentData.lon = NMEA.latlon2Decimal(tokens[5], tokens[6]);
+
+			this.currentData.speedOverGround = parseFloat(tokens[7]);
+			this.currentData.courseOverGround = parseFloat(tokens[8]);
+
+			this.currentData.timeStamp = this.parseNMEATimeAndDate(tokens[1], tokens[9]);
+
+			if (tokens[6] == "0")	// tokens[6] validity: a-OK, v-warning) 
+				return false;
+		}
+		catch (er) {
+			console.log("error parsing RMC", er);
+			return false;
+		}
+		return true;
+
+	}
+	protected genGGA(sp: SailPoint): string {
+		var s: string = "$RRGGA,{this.genNMEATime(sp.timeStamp)},{A},{this.decimalToNMEAAngle(sp.lat)},{this.genNorthSouth(sp.lat)},{this.decimalToNMEAAngle(sp.lon)},{this.genEastWest(sp.lon)},{sp.speedOverGround.toFixed(1)},{Math.trunc(sp.courseOverGround)},{this.genNMEADate(sp.timeStamp)},{Math.abs(this.magneticDeclination).toFixed(1)},{this.genEastWest(this.magneticDeclination)},{A}*";
+
 		s += NMEA.calculateCheckSum(s);
 		return s;
 	}
