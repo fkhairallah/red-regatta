@@ -17,6 +17,7 @@ export declare class Module {
     UID: string;
     name: string;
     description: string;
+    partNumber: string;
     repeatable: boolean;
     timeInterval: number;
     hourInterval: number;

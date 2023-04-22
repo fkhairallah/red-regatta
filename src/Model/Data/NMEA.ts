@@ -150,7 +150,13 @@ import { differenceInMilliseconds } from "date-fns";
 				this.parseDBT(tokens);
 				break;
 			case "MWV":	// Wind speed & direction
-				this.parseMWV(tokens);
+				//this.parseMWV(tokens);
+				break;
+			case "VWT":
+				this.parseVWT(tokens);
+				break;
+			case "VWR":
+				this.parseVWR(tokens);
 				break;
 			case "VHW":	// water speed & magnetic heading
 				this.parseVHW(tokens);
@@ -361,6 +367,38 @@ import { differenceInMilliseconds } from "date-fns";
 		s += NMEA.calculateCheckSum(s);
 		return s;
 	}
+
+
+/* === VWT/VWR - Wind Speed and Angle ===
+	
+	------------------------------------------------------------------------------
+	         1   2 3    4
+	         |   | |    | 
+	$YDVWT,135.6,L,21.1,N,10.9,M,39.1,K*7C<0x0D><0x0A>
+	------------------------------------------------------------------------------
+	
+	Field Number: 
+	
+	1. True Wind Angle, 0 to 360 degrees
+	2. True Wind Speed
+	3. Wind Speed Units, K/M/N
+
+	6. Checksum
+	*/
+	private parseVWT(tokens: any[]): boolean {
+
+			this.currentData.trueWindAngle = parseFloat(tokens[1]);
+			this.currentData.trueWindSpeed = parseFloat(tokens[3]);
+			return true;
+
+	}
+	private parseVWR(tokens: any[]): boolean {
+
+		this.currentData.apparentWindAngle = parseFloat(tokens[1]);
+		this.currentData.apparentWindSpeed = parseFloat(tokens[3]);
+		return true;
+
+}
 
 	/* === MWV - Wind Speed and Angle ===
 	

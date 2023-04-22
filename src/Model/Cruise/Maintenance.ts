@@ -39,6 +39,7 @@ export class Module {
     UID: string = "";
     name: string ="";
     description: string = "";
+    partNumber: string = "";
     repeatable: boolean = true;
     timeInterval: number = 0;
     hourInterval: number = 0;
@@ -54,6 +55,7 @@ export class Module {
         this.UID = o.UID;
         this.name = o.name;
         this.description = o.description;
+        this.partNumber =o.partNumber;
         this.repeatable = o.repeatable;
         this.timeInterval = o.timeInterval;
         this.hourInterval = o.hourInterval;

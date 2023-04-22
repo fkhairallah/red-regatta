@@ -24,7 +24,7 @@ export class StandingOrders   {
         this.type = o.type;
         this.author = o.author;
         this.message = o.message;
-        if (o.timeStamp) this.timestamp = o.timeStamp;
+        if (o.timeStamp) this.timestamp = new Date(o.timeStamp);
         if (o.location) this.location.loadFromObject(o.location);
         if (o.additional) this.additional = o.additional;
     }

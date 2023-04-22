@@ -37,6 +37,8 @@ export declare class NMEA extends EventEmitter {
     protected genGGA(sp: SailPoint): string;
     private parseRMC;
     protected genRMC(sp: SailPoint): string;
+    private parseVWT;
+    private parseVWR;
     private parseMWV;
     protected genMWV(sp: SailPoint, isTrue: boolean): string;
     protected genVBW(sp: SailPoint): string;
