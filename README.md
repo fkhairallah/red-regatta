@@ -8,6 +8,7 @@ Repurposing AS3 [Red]Regatta into a typescript library
     - added partNumber element to MaintenanceModule
     - Added GGA sentence to NMEA
     - Fixed timestamp problem on StandingOrders
+    - added category to LogEntry
 
 ## V1.6
     - refactored Watch class to allow reserved slots instead of just captain's hour

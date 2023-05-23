@@ -2,6 +2,7 @@ import { GPSPoint } from '../Data/GPSPoint';
 export declare type LogEntry = {
     timestamp: Date;
     author: string;
+    category: string;
     message: string;
     location?: GPSPoint;
     additional?: any;
