@@ -175,7 +175,9 @@ export class ShipWatch {
     let date = new Date(startDate);
 
     for (var i = 0; i < numberOfWatches; i++) {
-      wbList.push(this.getWatch(date));
+      let wb = this.getWatch(date);
+      wb.date = date;
+      wbList.push({ ...wb });
       date = addHours(date, this.hoursInWatch);
     }
     return wbList;
