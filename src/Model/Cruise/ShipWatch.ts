@@ -159,7 +159,7 @@ export class ShipWatch {
     if (!newWatch.reserved) {
       newWatch.crew = this.crewList[watchIndex % this.crewList.length];
     }
-    newWatch.date = date;
+    newWatch.date = new Date(date);
 
     return newWatch;
   }
