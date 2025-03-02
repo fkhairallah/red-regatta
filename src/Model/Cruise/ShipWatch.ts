@@ -2,6 +2,7 @@ import { addDays, addHours, format, subHours } from "date-fns";
 
 export interface WatchBlock {
   //id: Number;
+  date: Date;
   start: number;
   end: number;
   reserved: Boolean;
@@ -68,6 +69,7 @@ export class ShipWatch {
     // loop through creating watch block template
     do {
       let newWatch: WatchBlock = {
+        date: this.startDate,
         start: wStart,
         end: wStart + this.hoursInWatch,
         reserved: false,
@@ -134,6 +136,7 @@ export class ShipWatch {
     let inRange = false;
 
     if (date.getTime() < this.startDate.getTime()) return {
+      date: date,
       start: date.getHours(),
       end: date.getHours() + this.hoursInWatch,
       reserved: true,

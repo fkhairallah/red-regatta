@@ -1,4 +1,5 @@
 export interface WatchBlock {
+    date: Date;
     start: number;
     end: number;
     reserved: Boolean;
