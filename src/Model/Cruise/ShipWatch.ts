@@ -136,7 +136,7 @@ export class ShipWatch {
     let inRange = false;
 
     if (date.getTime() < this.startDate.getTime()) return {
-      date: date,
+      date: this.startDate,
       start: date.getHours(),
       end: date.getHours() + this.hoursInWatch,
       reserved: true,
@@ -159,6 +159,7 @@ export class ShipWatch {
     if (!newWatch.reserved) {
       newWatch.crew = this.crewList[watchIndex % this.crewList.length];
     }
+    newWatch.date = date;
 
     return newWatch;
   }
